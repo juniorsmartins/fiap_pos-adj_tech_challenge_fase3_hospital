@@ -6,13 +6,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SecurityEndpoint {
 
-    @GetMapping("/public")
-    public String publicRoute() {
-        return "Rota Pública";
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "Rota Admin";
     }
 
-    @GetMapping("/private")
-    public String privateRoute() {
-        return "Rota Privada";
+    @GetMapping("/user")
+    public String userPage() {
+        return "Rota User";
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "Rota Login";
     }
 }

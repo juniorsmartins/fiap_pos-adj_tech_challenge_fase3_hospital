@@ -37,5 +37,21 @@ spring:
     open-in-view: false
     show-sql: true
 
+  sql: # Esta propriedade controla quando e como o Spring Boot inicializa o banco de dados com scripts SQL
+    init:
+      mode: always
+      data-locations: classpath:db/data.sql
 
+  security: # Configuracao do Sprint Security
+    form-login:
+      page: /login # Define a URL personalizada (caso precise ser usada em outra parte do sistema)
+
+  messages: # Configuracao de mensagem para login personalizado
+    basename: messages
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG # configuracao de log
 

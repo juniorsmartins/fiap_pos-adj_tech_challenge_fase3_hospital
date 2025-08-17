@@ -1,31 +1,67 @@
 package fiap.adj.fase3.tech_challenge_hospital.application.configs;
 
-import fiap.adj.fase3.tech_challenge_hospital.application.configs.security.PlainTextPasswordEncoder;
+import fiap.adj.fase3.tech_challenge_hospital.application.usecases.CustomUserDetailsUseCase;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Configura gerenciador de autenticação
-    // HttpSecurity - trata da camada de segurança do Http
-    // O HttpSecurity muda a configuração padrão para Http Basic
+    private final CustomUserDetailsUseCase userDetailsUseCase;
+
+    public SecurityConfig(CustomUserDetailsUseCase userDetailsUseCase) {
+        this.userDetailsUseCase = userDetailsUseCase;
+    }
+
+    // SecurityFilterChain - Sequência de filtros de URL para segurança
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CustomUserDetailsUseCase customUserDetailsUseCase) throws Exception {
+
+        // Filtra os paths e aplica políticas de segurança
+        httpSecurity.authorizeHttpRequests(authorizeRequests ->
+            authorizeRequests
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/user/**").hasRole("USER")
+                            .anyRequest().authenticated()
+        ).formLogin(form -> form.successHandler(customAuthenticationSuccessHandler())
+        ).logout(logout -> logout.permitAll());
+
+        httpSecurity.headers(headers -> headers.frameOptions().disable());
+        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+
+        return httpSecurity.build();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+
+        return new AuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                    response.sendRedirect("/admin");
+                } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+                    response.sendRedirect("/user");
+                } else {
+                    response.sendRedirect("/");
+                }
+            }
+        };
     }
 
     // Define como será a codificação do password
@@ -34,34 +70,24 @@ public class SecurityConfig {
         return new PlainTextPasswordEncoder();
     }
 
-    // SecurityFilterChain - Sequência de filtros de URL para segurança
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        // Filtra os paths e aplica políticas de segurança
-        httpSecurity.authorizeHttpRequests(authorizeRequests -> {
-            authorizeRequests.requestMatchers("/public").permitAll();
-            authorizeRequests.requestMatchers("/logout").permitAll();
-            authorizeRequests.anyRequest().authenticated();
-        });
-        httpSecurity.httpBasic(Customizer.withDefaults());
-        return httpSecurity.build();
+    private class PlainTextPasswordEncoder implements PasswordEncoder {
+
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return rawPassword.toString();
+        }
+
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            return rawPassword.toString().equals(encodedPassword);
+        }
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-        inMemoryUserDetailsManager.createUser(
-                User.withUsername("usuario")
-                        .password("senha")
-                        .roles("USER")
-                        .build()
-        );
-        inMemoryUserDetailsManager.createUser(
-                User.withUsername("admin")
-                        .password("password")
-                        .roles("ADMIN", "USER")
-                        .build()
-        );
-        return inMemoryUserDetailsManager;
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authentication = new DaoAuthenticationProvider();
+        authentication.setUserDetailsService(userDetailsUseCase);
+        authentication.setPasswordEncoder(passwordEncoder());
+        return authentication;
     }
 }
