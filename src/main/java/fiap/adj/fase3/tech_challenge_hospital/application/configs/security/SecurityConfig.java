@@ -1,4 +1,4 @@
-package fiap.adj.fase3.tech_challenge_hospital.application.configs;
+package fiap.adj.fase3.tech_challenge_hospital.application.configs.security;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.usecases.CustomUserDetailsUseCase;
 import jakarta.servlet.ServletException;
@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,9 +41,9 @@ public class SecurityConfig {
                     .requestMatchers("/user/**").hasRole("USER")
                             .anyRequest().authenticated()
         ).formLogin(form -> form.successHandler(customAuthenticationSuccessHandler())
-        ).logout(logout -> logout.permitAll());
+        ).logout(LogoutConfigurer::permitAll);
 
-        httpSecurity.headers(headers -> headers.frameOptions().disable());
+        httpSecurity.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
 
         return httpSecurity.build();
