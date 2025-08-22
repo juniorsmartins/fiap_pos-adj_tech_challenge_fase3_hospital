@@ -23,12 +23,6 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomUserDetailsUseCase userDetailsUseCase;
-
-    public SecurityConfig(CustomUserDetailsUseCase userDetailsUseCase) {
-        this.userDetailsUseCase = userDetailsUseCase;
-    }
-
     // SecurityFilterChain - Sequência de filtros de URL para segurança
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CustomUserDetailsUseCase customUserDetailsUseCase) throws Exception {
@@ -66,6 +60,13 @@ public class SecurityConfig {
         };
     }
 
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsUseCase userDetailsUseCase, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authentication = new DaoAuthenticationProvider(userDetailsUseCase);
+        authentication.setPasswordEncoder(passwordEncoder);
+        return authentication;
+    }
+
     // Define como será a codificação do password
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -83,13 +84,5 @@ public class SecurityConfig {
         public boolean matches(CharSequence rawPassword, String encodedPassword) {
             return rawPassword.toString().equals(encodedPassword);
         }
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authentication = new DaoAuthenticationProvider();
-        authentication.setUserDetailsService(userDetailsUseCase);
-        authentication.setPasswordEncoder(passwordEncoder());
-        return authentication;
     }
 }
