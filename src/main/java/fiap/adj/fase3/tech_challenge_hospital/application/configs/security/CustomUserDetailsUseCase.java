@@ -1,4 +1,4 @@
-package fiap.adj.fase3.tech_challenge_hospital.application.usecases;
+package fiap.adj.fase3.tech_challenge_hospital.application.configs.security;
 
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.UserDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.UserRepository;

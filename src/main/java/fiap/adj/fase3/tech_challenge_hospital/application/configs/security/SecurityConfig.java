@@ -1,6 +1,5 @@
 package fiap.adj.fase3.tech_challenge_hospital.application.configs.security;
 
-import fiap.adj.fase3.tech_challenge_hospital.application.usecases.CustomUserDetailsUseCase;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
