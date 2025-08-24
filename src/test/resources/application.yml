@@ -11,6 +11,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
     show-sql: true
 
   sql: # Habilita ou desabilita acionamento de script SQL

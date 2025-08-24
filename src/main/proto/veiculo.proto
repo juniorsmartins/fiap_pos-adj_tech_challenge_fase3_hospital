@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package veiculo;
+
+option java_multiple_files = true;
+option java_package = "dev.ghlima.veiculo";
+
+service VeiculoService {
+  rpc ConsultarVeiculo (VeiculoRequest) returns (VeiculoResponse);
+}
+
+message VeiculoRequest {
+  string placa = 1;
+}
+
+message VeiculoResponse {
+  string placa = 1;
+  string marca = 2;
+  string modelo = 3;
+  int32 ano = 4;
+  bool disponivel = 5;
+}
