@@ -10,8 +10,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import java.util.UUID;
-
 @Controller
 @RequiredArgsConstructor
 public class PacienteController {
@@ -26,7 +24,7 @@ public class PacienteController {
     }
 
     @QueryMapping(value = "consultarPacientePorId")
-    public PacienteResponseDto consultarPacientePorId(@Argument UUID pacienteId) {
-        return pacienteInputPort.consultar(pacienteId, pacienteOutputPort);
+    public PacienteResponseDto consultarPacientePorId(@Argument Long id) {
+        return pacienteInputPort.consultar(id, pacienteOutputPort);
     }
 }
