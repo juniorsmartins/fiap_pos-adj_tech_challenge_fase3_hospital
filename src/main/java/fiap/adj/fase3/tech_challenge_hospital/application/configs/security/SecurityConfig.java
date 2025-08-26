@@ -30,6 +30,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorizeRequests ->
             authorizeRequests
                     .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers("/graphql/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/user/**").hasRole("USER")
                             .anyRequest().authenticated()
@@ -38,6 +39,7 @@ public class SecurityConfig {
 
         httpSecurity.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/graphql/**"));
 
         return httpSecurity.build();
     }

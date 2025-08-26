@@ -1,71 +1,22 @@
-enum ReservationStatus {
-    UNKNOWN,
-    CONFIRMED,
-    PENDING,
-    CANCELLED
-}
-
-type Vehicle {
+type Paciente {
     id: ID!
-    make: String!
-    model: String!
-    category: String!
-    isAvailable: Boolean!
+    nome: String!
 }
 
-type Reservation {
-    reservationId: ID!
-    vehicleId: ID!
-    userId: ID!
-    startDate: String!
-    endDate: String!
-    status: ReservationStatus!
+input PacienteRequestDto {
+    nome: String!
 }
 
-type AddVehicleResponse {
-    vehicleId: ID!
-    message: String!
+type PacienteResponseDto {
+    id: ID!
+    nome: String!
 }
 
-type CreateReservationResponse {
-    reservationId: ID!
-    message: String!
+type Query {
+    consultarPacientePorId(id: ID!): PacienteResponseDto
 }
 
-type CompleteReservationResponse {
-    message: String!
-    totalDays: Int!
-}
-
-type VehicleAndReservationResponse {
-    vehicle: Vehicle
-    reservation: Reservation
-}
-
-input VehicleInput {
-    make: String!
-    model: String!
-    category: String!
-    isAvailable: Boolean!
-}
-
-input CreateReservationInput {
-    vehicleId: ID!
-    userId: ID!
-    startDate: String!
-    endDate: String!
-}
-
-extend type Query {
-    listAvailableVehicles: [Vehicle!]!
-    getVehicleById(id: ID!): Vehicle
-    getReservationByVehicleId(vehicleId: ID!): Reservation
-    getVehicleAndReservationById(vehicleId: ID!): VehicleAndReservationResponse!
-}
-
-extend type Mutation {
-    addVehicle(vehicle: VehicleInput): AddVehicleResponse!
-    createReservation(reservation: CreateReservationInput): CreateReservationResponse!
-    completeReservation(reservationId: ID!): CompleteReservationResponse!
+type Mutation {
+    criarPaciente(request: PacienteRequestDto): PacienteResponseDto
 }
 

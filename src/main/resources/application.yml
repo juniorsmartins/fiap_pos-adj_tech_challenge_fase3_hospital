@@ -12,9 +12,13 @@ spring:
     activate:
       on-profile: default
 
-  graphql:
+  graphql: # Fornece interface para testar requisicoes GraphQL
     graphiql:
-      enabled: true
+      enabled: true # localhost:8080/graphiql
+
+  devtools:
+    restart:
+      additional-exclude: logs/**
 
   datasource:
     driver-class-name: org.h2.Driver
