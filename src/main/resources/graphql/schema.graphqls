@@ -3,7 +3,16 @@ type Paciente {
     nome: String!
 }
 
+type Medico {
+    id: ID!
+    nome: String!
+}
+
 input PacienteRequestDto {
+    nome: String!
+}
+
+input MedicoRequestDto {
     nome: String!
 }
 
@@ -12,11 +21,18 @@ type PacienteResponseDto {
     nome: String!
 }
 
+type MedicoResponseDto {
+    id: ID!
+    nome: String!
+}
+
 type Query {
     consultarPacientePorId(id: ID!): PacienteResponseDto
+    consultarMedicoPorId(id: ID!): MedicoResponseDto
 }
 
 type Mutation {
     criarPaciente(request: PacienteRequestDto): PacienteResponseDto
+    criarMedico(request: MedicoRequestDto): MedicoResponseDto
 }
 
