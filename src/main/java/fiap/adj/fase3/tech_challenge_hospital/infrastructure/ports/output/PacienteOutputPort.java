@@ -1,10 +1,13 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output;
 
-import fiap.adj.fase3.tech_challenge_hospital.application.dtos.response.PacienteResponseDto;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.PacienteDto;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.PacienteDao;
+
+import java.util.Optional;
 
 public interface PacienteOutputPort {
 
-    PacienteResponseDto criar(PacienteResponseDto dto);
+    PacienteDto criar(PacienteDto dto);
 
-    PacienteResponseDto findById(Long id);
+    Optional<PacienteDao> consultarPorId(Long id);
 }

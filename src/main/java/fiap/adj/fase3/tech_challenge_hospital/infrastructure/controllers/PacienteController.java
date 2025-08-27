@@ -4,11 +4,14 @@ import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.PacienteR
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.response.PacienteResponseDto;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.input.PacienteInputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.PacienteOutputPort;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.presenters.PacientePresenter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,11 +23,16 @@ public class PacienteController {
 
     @MutationMapping(value = "criarPaciente")
     public PacienteResponseDto criarPaciente(@Argument PacienteRequestDto request) {
-        return pacienteInputPort.criar(request, pacienteOutputPort);
+        return Optional.ofNullable(request)
+                .map(dto -> pacienteInputPort.criar(dto, pacienteOutputPort))
+                .map(PacientePresenter::converterDtoParaResponse)
+                .orElseThrow();
     }
 
     @QueryMapping(value = "consultarPacientePorId")
     public PacienteResponseDto consultarPacientePorId(@Argument Long id) {
-        return pacienteInputPort.consultar(id, pacienteOutputPort);
+        return pacienteOutputPort.consultarPorId(id)
+                .map(PacientePresenter::converterDaoParaResponse)
+                .orElseThrow();
     }
 }
