@@ -35,4 +35,10 @@ public class PacienteController {
                 .map(PacientePresenter::converterDaoParaResponse)
                 .orElseThrow();
     }
+
+    @MutationMapping
+    public Boolean apagarPaciente(@Argument Long id) {
+        pacienteInputPort.apagarPorId(id, pacienteOutputPort);
+        return true;
+    }
 }

@@ -27,7 +27,7 @@ public class MedicoUseCase implements MedicoInputPort {
     @Override
     public void apagarPorId(Long id, MedicoOutputPort outputPort) {
         outputPort.consultarPorId(id)
-                        .ifPresentOrElse(med -> outputPort.apagarPorId(med.getId()), () -> {
+                        .ifPresentOrElse(dao -> outputPort.apagarPorId(dao.getId()), () -> {
                             throw new RuntimeException();
                         });
     }

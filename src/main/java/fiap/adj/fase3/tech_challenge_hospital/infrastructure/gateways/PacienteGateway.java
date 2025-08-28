@@ -29,4 +29,9 @@ public class PacienteGateway implements PacienteOutputPort {
     public Optional<PacienteDao> consultarPorId(Long id) {
         return pacienteRepository.findById(id);
     }
+
+    @Override
+    public void apagarPorId(Long id) {
+        pacienteRepository.deleteById(id);
+    }
 }

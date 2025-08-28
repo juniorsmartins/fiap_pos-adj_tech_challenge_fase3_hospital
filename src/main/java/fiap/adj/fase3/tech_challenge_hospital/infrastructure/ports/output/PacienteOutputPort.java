@@ -10,4 +10,6 @@ public interface PacienteOutputPort {
     PacienteDto criar(PacienteDto dto);
 
     Optional<PacienteDao> consultarPorId(Long id);
+
+    void apagarPorId(Long id);
 }

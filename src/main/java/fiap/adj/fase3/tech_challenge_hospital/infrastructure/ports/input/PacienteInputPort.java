@@ -7,4 +7,6 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.Pacien
 public interface PacienteInputPort {
 
     PacienteDto criar(PacienteRequestDto requestDto, PacienteOutputPort outputPort);
+
+    void apagarPorId(Long id, PacienteOutputPort outputPort);
 }
