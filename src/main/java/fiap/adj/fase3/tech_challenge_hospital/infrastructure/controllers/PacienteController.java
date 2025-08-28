@@ -32,7 +32,7 @@ public class PacienteController {
     @QueryMapping(value = "consultarPacientePorId")
     public PacienteResponseDto consultarPacientePorId(@Argument Long id) {
         return pacienteOutputPort.consultarPorId(id)
-                .map(PacientePresenter::converterDaoParaResponse)
+                .map(PacientePresenter::converterDtoParaResponse)
                 .orElseThrow();
     }
 
@@ -40,5 +40,13 @@ public class PacienteController {
     public Boolean apagarPaciente(@Argument Long id) {
         pacienteInputPort.apagarPorId(id, pacienteOutputPort);
         return true;
+    }
+
+    @MutationMapping
+    public PacienteResponseDto atualizarPaciente(@Argument Long id, @Argument PacienteRequestDto request) {
+        return Optional.ofNullable(request)
+                .map(dtoRequest -> pacienteInputPort.atualizar(id, dtoRequest, pacienteOutputPort))
+                .map(PacientePresenter::converterDtoParaResponse)
+                .orElseThrow();
     }
 }

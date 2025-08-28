@@ -33,19 +33,9 @@ public class MedicoUseCase implements MedicoInputPort {
     @Override
     public MedicoDto atualizar(Long id, MedicoRequestDto requestDto, MedicoOutputPort outputPort) {
         return outputPort.consultarPorId(id)
-            .map(dto -> regraAtualizar(dto, requestDto))
+            .map(dto -> Medico.regraAtualizar(dto, requestDto))
             .map(MedicoMapper::converterEntityParaDto)
             .map(outputPort::salvar)
-            .orElseThrow();
-    }
-
-    private Medico regraAtualizar(MedicoDto dto, MedicoRequestDto requestDto) {
-        return Optional.ofNullable(requestDto)
-            .map(MedicoMapper::converterRequestParaEntity)
-            .map(entity -> {
-                entity.setId(dto.id());
-                return entity;
-            })
             .orElseThrow();
     }
 }

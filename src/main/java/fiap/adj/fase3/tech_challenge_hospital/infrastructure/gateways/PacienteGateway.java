@@ -1,7 +1,6 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.gateways;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.PacienteDto;
-import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.PacienteDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.PacienteOutputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.presenters.PacientePresenter;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.PacienteRepository;
@@ -17,7 +16,7 @@ public class PacienteGateway implements PacienteOutputPort {
     private final PacienteRepository pacienteRepository;
 
     @Override
-    public PacienteDto criar(PacienteDto dto) {
+    public PacienteDto salvar(PacienteDto dto) {
         return Optional.ofNullable(dto)
                 .map(PacientePresenter::converterDtoParaDao)
                 .map(pacienteRepository::save)
@@ -26,8 +25,9 @@ public class PacienteGateway implements PacienteOutputPort {
     }
 
     @Override
-    public Optional<PacienteDao> consultarPorId(Long id) {
-        return pacienteRepository.findById(id);
+    public Optional<PacienteDto> consultarPorId(Long id) {
+        return pacienteRepository.findById(id)
+                .map(PacientePresenter::converterDaoParaDto);
     }
 
     @Override

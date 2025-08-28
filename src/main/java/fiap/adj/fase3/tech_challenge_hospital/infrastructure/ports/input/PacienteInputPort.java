@@ -9,4 +9,6 @@ public interface PacienteInputPort {
     PacienteDto criar(PacienteRequestDto requestDto, PacienteOutputPort outputPort);
 
     void apagarPorId(Long id, PacienteOutputPort outputPort);
+
+    PacienteDto atualizar(Long id, PacienteRequestDto requestDto, PacienteOutputPort outputPort);
 }

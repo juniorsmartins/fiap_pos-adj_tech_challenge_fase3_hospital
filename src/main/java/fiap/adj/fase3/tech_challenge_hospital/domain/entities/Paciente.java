@@ -1,5 +1,9 @@
 package fiap.adj.fase3.tech_challenge_hospital.domain.entities;
 
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.PacienteDto;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.PacienteRequestDto;
+import fiap.adj.fase3.tech_challenge_hospital.application.mappers.PacienteMapper;
+
 public final class Paciente {
 
     private Long id;
@@ -15,11 +19,26 @@ public final class Paciente {
         this.nome = nome;
     }
 
+    public static Paciente regraAtualizar(PacienteDto dto, PacienteRequestDto request) {
+
+        var entity = PacienteMapper.converterRequestParaEntity(request);
+        entity.setId(dto.id());
+        return entity;
+    }
+
     public Long getId() {
         return id;
     }
 
     public String getNome() {
         return nome;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
