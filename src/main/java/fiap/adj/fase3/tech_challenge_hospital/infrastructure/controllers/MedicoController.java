@@ -32,7 +32,7 @@ public class MedicoController {
     @QueryMapping
     public MedicoResponseDto consultarMedicoPorId(@Argument Long id) {
         return medicoOutputPort.consultarPorId(id)
-                .map(MedicoPresenter::converterDaoParaResponse)
+                .map(MedicoPresenter::converterDtoParaResponse)
                 .orElseThrow();
     }
 
@@ -40,5 +40,13 @@ public class MedicoController {
     public Boolean apagarMedico(@Argument Long id) {
         medicoInputPort.apagarPorId(id, medicoOutputPort);
         return true;
+    }
+
+    @MutationMapping
+    public MedicoResponseDto atualizarMedico(@Argument Long id, @Argument MedicoRequestDto request) {
+        return Optional.ofNullable(request)
+                .map(dtoRequest -> medicoInputPort.atualizar(id, dtoRequest, medicoOutputPort))
+                .map(MedicoPresenter::converterDtoParaResponse)
+                .orElseThrow();
     }
 }

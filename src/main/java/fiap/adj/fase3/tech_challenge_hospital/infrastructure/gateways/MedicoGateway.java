@@ -1,12 +1,12 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.gateways;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.MedicoDto;
-import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.MedicoOutputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.presenters.MedicoPresenter;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.MedicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,8 +16,9 @@ public class MedicoGateway implements MedicoOutputPort {
 
     private final MedicoRepository medicoRepository;
 
+    @Transactional
     @Override
-    public MedicoDto criar(MedicoDto dto) {
+    public MedicoDto salvar(MedicoDto dto) {
         return Optional.ofNullable(dto)
                 .map(MedicoPresenter::converterDtoParaDao)
                 .map(medicoRepository::save)
@@ -25,11 +26,14 @@ public class MedicoGateway implements MedicoOutputPort {
                 .orElseThrow();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Optional<MedicoDao> consultarPorId(Long id) {
-        return medicoRepository.findById(id);
+    public Optional<MedicoDto> consultarPorId(Long id) {
+        return medicoRepository.findById(id)
+                .map(MedicoPresenter::converterDaoParaDto);
     }
 
+    @Transactional
     @Override
     public void apagarPorId(Long id) {
         medicoRepository.deleteById(id);

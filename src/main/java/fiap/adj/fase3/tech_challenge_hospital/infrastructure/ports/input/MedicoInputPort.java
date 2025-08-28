@@ -9,4 +9,6 @@ public interface MedicoInputPort {
     MedicoDto criar(MedicoRequestDto requestDto, MedicoOutputPort outputPort);
 
     void apagarPorId(Long id, MedicoOutputPort outputPort);
+
+    MedicoDto atualizar(Long id, MedicoRequestDto requestDto, MedicoOutputPort outputPort);
 }
