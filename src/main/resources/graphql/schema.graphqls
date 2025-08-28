@@ -33,6 +33,8 @@ type Query {
 
 type Mutation {
     criarPaciente(request: PacienteRequestDto): PacienteResponseDto
+    apagarPaciente(id: ID!): Boolean!
     criarMedico(request: MedicoRequestDto): MedicoResponseDto
+    apagarMedico(id: ID!): Boolean!
 }
 

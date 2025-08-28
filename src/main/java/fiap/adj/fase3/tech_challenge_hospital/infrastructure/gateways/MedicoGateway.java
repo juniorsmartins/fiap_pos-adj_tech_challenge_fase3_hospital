@@ -29,4 +29,9 @@ public class MedicoGateway implements MedicoOutputPort {
     public Optional<MedicoDao> consultarPorId(Long id) {
         return medicoRepository.findById(id);
     }
+
+    @Override
+    public void apagarPorId(Long id) {
+        medicoRepository.deleteById(id);
+    }
 }

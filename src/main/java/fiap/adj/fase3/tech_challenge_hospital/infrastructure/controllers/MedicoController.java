@@ -35,4 +35,10 @@ public class MedicoController {
                 .map(MedicoPresenter::converterDaoParaResponse)
                 .orElseThrow();
     }
+
+    @MutationMapping
+    public Boolean apagarMedico(@Argument Long id) {
+        medicoInputPort.apagarPorId(id, medicoOutputPort);
+        return true;
+    }
 }
