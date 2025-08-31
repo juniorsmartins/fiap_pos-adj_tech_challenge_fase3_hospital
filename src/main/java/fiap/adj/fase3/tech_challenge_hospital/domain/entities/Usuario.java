@@ -33,4 +33,9 @@ public final class Usuario {
         this.enabled = enabled;
         this.roles = roles;
     }
+
+    public Usuario(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

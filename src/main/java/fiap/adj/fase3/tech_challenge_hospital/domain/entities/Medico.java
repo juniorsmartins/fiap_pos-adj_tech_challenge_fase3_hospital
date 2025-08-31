@@ -5,12 +5,12 @@ import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.RoleDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.UserDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.MedicoRequestDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.UserRequestDto;
-import fiap.adj.fase3.tech_challenge_hospital.application.mappers.MedicoMapper;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.RoleEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.RoleOutputPort;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,10 +73,20 @@ public final class Medico {
         return new RoleDto(role.getId(), role.getName());
     }
 
-    public static Medico regraAtualizar(MedicoDto dto, MedicoRequestDto request) {
+    public static Medico regraAtualizar(MedicoDto dto, MedicoRequestDto medicoRequestDto) {
 
-        var entity = MedicoMapper.converterDtoParaEntity(request);
-        entity.setId(dto.id());
-        return entity;
+        var userRequest = medicoRequestDto.getUser();
+        var usuario = new Usuario(userRequest.getUsername(), userRequest.getPassword());
+        usuario.setId(dto.user().id());
+        usuario.setEnabled(dto.user().enabled());
+
+        Set<Role> roles = new HashSet<>();
+        dto.user().roles()
+                .forEach(roleDto -> {
+                    roles.add(new Role(roleDto.id(), roleDto.name()));
+                });
+        usuario.setRoles(roles);
+
+        return new Medico(dto.id(), medicoRequestDto.getNome(), usuario);
     }
 }
