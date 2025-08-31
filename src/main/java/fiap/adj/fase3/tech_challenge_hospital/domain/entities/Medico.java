@@ -2,6 +2,7 @@ package fiap.adj.fase3.tech_challenge_hospital.domain.entities;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.MedicoDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.RoleDto;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.UserDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.MedicoRequestDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.UserRequestDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.mappers.MedicoMapper;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -52,6 +54,23 @@ public final class Medico {
 
     private static Role converterDtoParaEntity(RoleDto dto) {
         return new Role(dto.id(), dto.name());
+    }
+
+    public static MedicoDto converterEntityParaDto(Medico medico) {
+        var userDto = converterEntityParaDto(medico.getUser());
+        return new MedicoDto(medico.getId(), medico.getNome(), userDto);
+    }
+
+    private static UserDto converterEntityParaDto(Usuario usuario) {
+        var roleDto = usuario.getRoles().stream()
+                .map(Medico::converterEntityParaDto)
+                .collect(Collectors.toSet());
+
+        return new UserDto(usuario.getId(), usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), roleDto);
+    }
+
+    private static RoleDto converterEntityParaDto(Role role) {
+        return new RoleDto(role.getId(), role.getName());
     }
 
     public static Medico regraAtualizar(MedicoDto dto, MedicoRequestDto request) {

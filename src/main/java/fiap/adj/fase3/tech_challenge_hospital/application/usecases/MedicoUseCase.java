@@ -2,7 +2,6 @@ package fiap.adj.fase3.tech_challenge_hospital.application.usecases;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.MedicoDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.MedicoRequestDto;
-import fiap.adj.fase3.tech_challenge_hospital.application.mappers.MedicoMapper;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.Medico;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.input.MedicoInputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.MedicoOutputPort;
@@ -20,7 +19,7 @@ public class MedicoUseCase implements MedicoInputPort {
     public MedicoDto criar(MedicoRequestDto requestDto, MedicoOutputPort medicoOutputPort, RoleOutputPort roleOutputPort) {
         return Optional.ofNullable(requestDto)
             .map(request -> Medico.converterRequestParaEntity(request, roleOutputPort))
-            .map(MedicoMapper::converterEntityParaDto)
+            .map(Medico::converterEntityParaDto)
             .map(medicoOutputPort::salvar)
             .orElseThrow();
     }
@@ -37,7 +36,7 @@ public class MedicoUseCase implements MedicoInputPort {
     public MedicoDto atualizar(Long id, MedicoRequestDto requestDto, MedicoOutputPort outputPort) {
         return outputPort.consultarPorId(id)
             .map(dto -> Medico.regraAtualizar(dto, requestDto))
-            .map(MedicoMapper::converterEntityParaDto)
+            .map(Medico::converterEntityParaDto)
             .map(outputPort::salvar)
             .orElseThrow();
     }
