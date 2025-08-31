@@ -19,4 +19,7 @@ public final class MedicoDao {
     private Long id;
 
     private String nome;
+
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, targetEntity = UserDao.class, optional = false)
+    private UserDao user;
 }

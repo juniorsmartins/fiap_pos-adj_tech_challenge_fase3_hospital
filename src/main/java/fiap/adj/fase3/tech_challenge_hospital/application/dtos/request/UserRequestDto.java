@@ -9,9 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public final class MedicoRequestDto {
+public final class UserRequestDto {
 
-    private String nome;
+    private String username;
 
-    private UserRequestDto user;
+    private String password;
 }

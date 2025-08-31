@@ -6,19 +6,22 @@ import fiap.adj.fase3.tech_challenge_hospital.application.mappers.MedicoMapper;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.Medico;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.input.MedicoInputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.MedicoOutputPort;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.RoleOutputPort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class MedicoUseCase implements MedicoInputPort {
 
+    @Transactional
     @Override
-    public MedicoDto criar(MedicoRequestDto requestDto, MedicoOutputPort outputPort) {
+    public MedicoDto criar(MedicoRequestDto requestDto, MedicoOutputPort medicoOutputPort, RoleOutputPort roleOutputPort) {
         return Optional.ofNullable(requestDto)
-            .map(MedicoMapper::converterRequestParaEntity)
+            .map(request -> Medico.converterRequestParaEntity(request, roleOutputPort))
             .map(MedicoMapper::converterEntityParaDto)
-            .map(outputPort::salvar)
+            .map(medicoOutputPort::salvar)
             .orElseThrow();
     }
 

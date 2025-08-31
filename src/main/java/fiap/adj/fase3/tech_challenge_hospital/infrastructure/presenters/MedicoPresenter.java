@@ -4,21 +4,20 @@ import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.MedicoDt
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.response.MedicoResponseDto;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
 
-public class MedicoPresenter {
+public final class MedicoPresenter {
 
     public static MedicoResponseDto converterDtoParaResponse(MedicoDto dto) {
-        return new MedicoResponseDto(dto.id(), dto.nome());
-    }
-
-    public static MedicoResponseDto converterDaoParaResponse(MedicoDao dao) {
-        return new MedicoResponseDto(dao.getId(), dao.getNome());
+        var userResponseDto = UserPresenter.converterDtoParaResponse(dto.user());
+        return new MedicoResponseDto(dto.id(), dto.nome(), userResponseDto);
     }
 
     public static MedicoDao converterDtoParaDao(MedicoDto dto) {
-        return new MedicoDao(dto.id(), dto.nome());
+        var userDao = UserPresenter.converterDtoParaDao(dto.user());
+        return new MedicoDao(dto.id(), dto.nome(), userDao);
     }
 
     public static MedicoDto converterDaoParaDto(MedicoDao dao) {
-        return new MedicoDto(dao.getId(), dao.getNome());
+        var userDto = UserPresenter.converterDaoParaDto(dao.getUser());
+        return new MedicoDto(dao.getId(), dao.getNome(), userDto);
     }
 }

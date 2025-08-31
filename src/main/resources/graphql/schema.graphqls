@@ -1,3 +1,31 @@
+#type Role {
+#    id: ID!,
+#    nome: String!
+#}
+
+#type User {
+#    id: ID!,
+#    username: String!
+#    password: String!
+#    enabled: Boolean!
+#    roles: [RoleDao!]!
+#}
+
+input UserRequestDto {
+    username: String!
+    password: String!
+}
+
+input PacienteRequestDto {
+    nome: String!
+}
+
+input MedicoRequestDto {
+    nome: String!
+    user: UserRequestDto!
+}
+
+
 type Paciente {
     id: ID!
     nome: String!
@@ -8,12 +36,18 @@ type Medico {
     nome: String!
 }
 
-input PacienteRequestDto {
-    nome: String!
+
+type RoleResponseDto {
+    id: ID!
+    name: String!
 }
 
-input MedicoRequestDto {
-    nome: String!
+type UserResponseDto {
+    id: ID!
+    username: String!
+    password: String!
+    enabled: Boolean!
+    roles: [RoleResponseDto!]!
 }
 
 type PacienteResponseDto {
@@ -24,7 +58,9 @@ type PacienteResponseDto {
 type MedicoResponseDto {
     id: ID!
     nome: String!
+    user: UserResponseDto!
 }
+
 
 type Query {
     consultarPacientePorId(id: ID!): PacienteResponseDto
