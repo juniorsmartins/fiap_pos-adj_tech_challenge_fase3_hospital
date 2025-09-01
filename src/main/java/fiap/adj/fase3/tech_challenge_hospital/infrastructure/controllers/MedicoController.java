@@ -48,7 +48,7 @@ public class MedicoController {
     @MutationMapping
     public MedicoResponseDto atualizarMedico(@Argument Long id, @Argument MedicoRequestDto request) {
         return Optional.ofNullable(request)
-                .map(dtoRequest -> medicoInputPort.atualizar(id, dtoRequest, medicoOutputPort))
+                .map(dto -> medicoInputPort.atualizar(id, dto, medicoOutputPort))
                 .map(MedicoPresenter::converterDtoParaResponse)
                 .orElseThrow();
     }
