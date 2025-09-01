@@ -7,7 +7,7 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.RoleOu
 
 public interface MedicoInputPort {
 
-    MedicoDto criar(MedicoRequestDto requestDto, MedicoOutputPort medicoOutputPort, RoleOutputPort roleOutputPort);
+    MedicoDto criar(MedicoRequestDto request, MedicoOutputPort medicoOutputPort, RoleOutputPort roleOutputPort);
 
     void apagarPorId(Long id, MedicoOutputPort outputPort);
 

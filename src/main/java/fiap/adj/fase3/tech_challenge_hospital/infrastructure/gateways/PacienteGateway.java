@@ -6,6 +6,7 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.presenters.Paciente
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class PacienteGateway implements PacienteOutputPort {
 
     private final PacienteRepository pacienteRepository;
 
+    @Transactional
     @Override
     public PacienteDto salvar(PacienteDto dto) {
         return Optional.ofNullable(dto)

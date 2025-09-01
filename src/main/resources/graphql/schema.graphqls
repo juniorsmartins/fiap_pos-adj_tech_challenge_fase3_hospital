@@ -18,6 +18,7 @@ input UserRequestDto {
 
 input PacienteRequestDto {
     nome: String!
+    user: UserRequestDto!
 }
 
 input MedicoRequestDto {
@@ -26,39 +27,40 @@ input MedicoRequestDto {
 }
 
 
-type Paciente {
-    id: ID!
-    nome: String!
-}
-
-type Medico {
-    id: ID!
-    nome: String!
-}
+#type Paciente {
+#    id: ID!
+#    nome: String!
+#}
+#
+#type Medico {
+#    id: ID!
+#    nome: String!
+#}
 
 
 type RoleResponseDto {
-    id: ID!
-    name: String!
+    id: ID
+    name: String
 }
 
 type UserResponseDto {
-    id: ID!
-    username: String!
-    password: String!
-    enabled: Boolean!
-    roles: [RoleResponseDto!]!
+    id: ID
+    username: String
+    password: String
+    enabled: Boolean
+    roles: [RoleResponseDto]
 }
 
 type PacienteResponseDto {
-    id: ID!
-    nome: String!
+    id: ID
+    nome: String
+    user: UserResponseDto
 }
 
 type MedicoResponseDto {
-    id: ID!
-    nome: String!
-    user: UserResponseDto!
+    id: ID
+    nome: String
+    user: UserResponseDto
 }
 
 

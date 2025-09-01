@@ -12,4 +12,6 @@ import lombok.Setter;
 public final class PacienteRequestDto {
 
     private String nome;
+
+    private UserRequestDto user;
 }

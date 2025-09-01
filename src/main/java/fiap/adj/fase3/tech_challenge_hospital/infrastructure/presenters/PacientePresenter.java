@@ -6,19 +6,18 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.PacienteDao;
 
 public class PacientePresenter {
 
-    public static PacienteResponseDto converterDaoParaResponse(PacienteDao dao) {
-        return new PacienteResponseDto(dao.getId(), dao.getNome());
-    }
-
     public static PacienteResponseDto converterDtoParaResponse(PacienteDto dto) {
-        return new PacienteResponseDto(dto.id(), dto.nome());
+        var userResponse = UserPresenter.converterDtoParaResponse(dto.user());
+        return new PacienteResponseDto(dto.id(), dto.nome(), userResponse);
     }
 
     public static PacienteDao converterDtoParaDao(PacienteDto dto) {
-        return new PacienteDao(dto.id(), dto.nome());
+        var userDao = UserPresenter.converterDtoParaDao(dto.user());
+        return new PacienteDao(dto.id(), dto.nome(), userDao);
     }
 
     public static PacienteDto converterDaoParaDto(PacienteDao dao) {
-        return new PacienteDto(dao.getId(), dao.getNome());
+        var userDto = UserPresenter.converterDaoParaDto(dao.getUser());
+        return new PacienteDto(dao.getId(), dao.getNome(), userDto);
     }
 }

@@ -16,9 +16,9 @@ public class MedicoUseCase implements MedicoInputPort {
 
     @Transactional
     @Override
-    public MedicoDto criar(MedicoRequestDto requestDto, MedicoOutputPort medicoOutputPort, RoleOutputPort roleOutputPort) {
-        return Optional.ofNullable(requestDto)
-            .map(request -> Medico.converterRequestParaEntity(request, roleOutputPort))
+    public MedicoDto criar(MedicoRequestDto request, MedicoOutputPort medicoOutputPort, RoleOutputPort roleOutputPort) {
+        return Optional.ofNullable(request)
+            .map(dto -> Medico.converterRequestParaEntity(dto, roleOutputPort))
             .map(Medico::converterEntityParaDto)
             .map(medicoOutputPort::salvar)
             .orElseThrow();

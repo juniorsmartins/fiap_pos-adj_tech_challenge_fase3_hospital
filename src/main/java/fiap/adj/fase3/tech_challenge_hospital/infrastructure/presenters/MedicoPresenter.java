@@ -7,8 +7,8 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
 public final class MedicoPresenter {
 
     public static MedicoResponseDto converterDtoParaResponse(MedicoDto dto) {
-        var userResponseDto = UserPresenter.converterDtoParaResponse(dto.user());
-        return new MedicoResponseDto(dto.id(), dto.nome(), userResponseDto);
+        var userResponse = UserPresenter.converterDtoParaResponse(dto.user());
+        return new MedicoResponseDto(dto.id(), dto.nome(), userResponse);
     }
 
     public static MedicoDao converterDtoParaDao(MedicoDto dto) {
