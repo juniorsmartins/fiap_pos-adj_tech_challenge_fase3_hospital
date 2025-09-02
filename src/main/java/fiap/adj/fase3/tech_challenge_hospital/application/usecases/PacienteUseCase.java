@@ -33,6 +33,7 @@ public class PacienteUseCase implements PacienteInputPort {
                 });
     }
 
+    @Transactional
     @Override
     public PacienteDto atualizar(Long id, PacienteRequestDto requestDto, PacienteOutputPort pacienteOutputPort) {
         return pacienteOutputPort.consultarPorId(id)

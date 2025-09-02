@@ -24,18 +24,20 @@ public class MedicoUseCase implements MedicoInputPort {
             .orElseThrow();
     }
 
+    @Transactional
     @Override
-    public void apagarPorId(Long id, MedicoOutputPort outputPort) {
-        outputPort.consultarPorId(id)
-            .ifPresentOrElse(dto -> outputPort.apagarPorId(dto.id()), () -> {
+    public void apagarPorId(Long id, MedicoOutputPort medicoOutputPort) {
+        medicoOutputPort.consultarPorId(id)
+            .ifPresentOrElse(dto -> medicoOutputPort.apagarPorId(dto.id()), () -> {
                 throw new RuntimeException();
             });
     }
 
+    @Transactional
     @Override
-    public MedicoDto atualizar(Long id, MedicoRequestDto requestDto, MedicoOutputPort medicoOutputPort) {
+    public MedicoDto atualizar(Long id, MedicoRequestDto request, MedicoOutputPort medicoOutputPort) {
         return medicoOutputPort.consultarPorId(id)
-            .map(dto -> Medico.regraAtualizar(dto, requestDto))
+            .map(dto -> Medico.regraAtualizar(dto, request))
             .map(Medico::converterEntityParaDto)
             .map(medicoOutputPort::salvar)
             .orElseThrow();

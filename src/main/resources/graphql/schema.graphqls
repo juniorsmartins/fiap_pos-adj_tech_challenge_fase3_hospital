@@ -26,6 +26,11 @@ input MedicoRequestDto {
     user: UserRequestDto!
 }
 
+input EnfermeiroRequestDto {
+    nome: String!
+    user: UserRequestDto!
+}
+
 
 #type Paciente {
 #    id: ID!
@@ -63,10 +68,17 @@ type MedicoResponseDto {
     user: UserResponseDto
 }
 
+type EnfermeiroResponseDto {
+    id: ID
+    nome: String
+    user: UserResponseDto
+}
+
 
 type Query {
     consultarPacientePorId(id: ID!): PacienteResponseDto
     consultarMedicoPorId(id: ID!): MedicoResponseDto
+    consultarEnfermeiroPorId(id: ID!): EnfermeiroResponseDto
 }
 
 type Mutation {
@@ -76,5 +88,8 @@ type Mutation {
     criarMedico(request: MedicoRequestDto): MedicoResponseDto
     apagarMedico(id: ID!): Boolean!
     atualizarMedico(id: ID!, request: MedicoRequestDto): MedicoResponseDto!
+    criarEnfermeiro(request: EnfermeiroRequestDto): EnfermeiroResponseDto
+    apagarEnfermeiro(id: ID!): Boolean!
+    atualizarEnfermeiro(id: ID!, request: EnfermeiroRequestDto): EnfermeiroResponseDto!
 }
 

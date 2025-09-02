@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum RoleEnum {
 
     ROLE_MEDICO("ROLE_MEDICO"),
-    ROLE_PACIENTE("ROLE_PACIENTE");
+    ROLE_PACIENTE("ROLE_PACIENTE"),
+    ROLE_ENFERMEIRO("ROLE_ENFERMEIRO");
 
     private final String value;
 }
