@@ -37,6 +37,12 @@ public final class Medico {
         return new MedicoDto(medico.getId(), medico.getNome(), userDto);
     }
 
+    public static Medico converterDtoParaEntity(MedicoDto dto) {
+        var usuario = Usuario.converterDtoParaEntity(dto.user());
+        return new Medico(dto.id(), dto.nome(), usuario);
+
+    }
+
     public static Medico regraAtualizar(MedicoDto dto, MedicoRequestDto request) {
 
         var userRequest = request.getUser();

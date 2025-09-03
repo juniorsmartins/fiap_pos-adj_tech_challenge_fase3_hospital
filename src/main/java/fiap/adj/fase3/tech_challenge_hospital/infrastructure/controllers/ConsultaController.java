@@ -1,0 +1,36 @@
+package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
+
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.ConsultaRequestDto;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.response.ConsultaResponseDto;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.input.ConsultaInputPort;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.ConsultaOutputPort;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.MedicoOutputPort;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.PacienteOutputPort;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.presenters.ConsultaPresenter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.stereotype.Controller;
+
+import java.util.Optional;
+
+@Controller
+@RequiredArgsConstructor
+public class ConsultaController {
+
+    private final ConsultaInputPort consultaInputPort;
+
+    private final ConsultaOutputPort consultaOutputPort;
+
+    private final MedicoOutputPort medicoOutputPort;
+
+    private final PacienteOutputPort pacienteOutputPort;
+
+    @MutationMapping
+    public ConsultaResponseDto agendarConsulta(@Argument ConsultaRequestDto request) {
+        return Optional.ofNullable(request)
+                .map(dto -> consultaInputPort.agendar(dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
+                .map(ConsultaPresenter::converterDtoParaResponse)
+                .orElseThrow();
+    }
+}

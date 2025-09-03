@@ -56,4 +56,12 @@ public final class Usuario {
 
         return new UserDto(usuario.getId(), usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), roleDto);
     }
+
+    public static Usuario converterDtoParaEntity(UserDto dto) {
+        var role = dto.roles().stream()
+                .map(Role::converterDtoParaEntity)
+                .collect(Collectors.toSet());
+
+        return new Usuario(dto.id(), dto.username(), dto.password(), dto.enabled(), role);
+    }
 }

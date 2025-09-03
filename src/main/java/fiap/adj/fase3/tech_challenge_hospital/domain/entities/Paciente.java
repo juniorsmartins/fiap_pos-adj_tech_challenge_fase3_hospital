@@ -37,6 +37,11 @@ public final class Paciente {
         return new PacienteDto(paciente.getId(), paciente.getNome(), userDto);
     }
 
+    public static Paciente converterDtoParaEntity(PacienteDto dto) {
+        var usuario = Usuario.converterDtoParaEntity(dto.user());
+        return new Paciente(dto.id(), dto.nome(), usuario);
+    }
+
     public static Paciente regraAtualizar(PacienteDto dto, PacienteRequestDto request) {
 
         var userRequest = request.getUser();

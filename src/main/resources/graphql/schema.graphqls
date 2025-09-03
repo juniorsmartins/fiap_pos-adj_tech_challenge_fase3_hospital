@@ -31,6 +31,12 @@ input EnfermeiroRequestDto {
     user: UserRequestDto!
 }
 
+input ConsultaRequestDto {
+    dataHora: String!
+    medicoId: ID!
+    pacienteId: ID!
+}
+
 
 #type Paciente {
 #    id: ID!
@@ -74,6 +80,14 @@ type EnfermeiroResponseDto {
     user: UserResponseDto
 }
 
+type ConsultaResponseDto {
+    id: ID
+    dataHora: String
+    status: String
+    medico: MedicoResponseDto
+    paciente: PacienteResponseDto
+}
+
 
 type Query {
     consultarPacientePorId(id: ID!): PacienteResponseDto
@@ -82,14 +96,15 @@ type Query {
 }
 
 type Mutation {
-    criarPaciente(request: PacienteRequestDto): PacienteResponseDto
-    apagarPaciente(id: ID!): Boolean!
-    atualizarPaciente(id: ID!, request: PacienteRequestDto): PacienteResponseDto!
-    criarMedico(request: MedicoRequestDto): MedicoResponseDto
-    apagarMedico(id: ID!): Boolean!
-    atualizarMedico(id: ID!, request: MedicoRequestDto): MedicoResponseDto!
-    criarEnfermeiro(request: EnfermeiroRequestDto): EnfermeiroResponseDto
-    apagarEnfermeiro(id: ID!): Boolean!
-    atualizarEnfermeiro(id: ID!, request: EnfermeiroRequestDto): EnfermeiroResponseDto!
+    criarPaciente(request: PacienteRequestDto!): PacienteResponseDto
+    apagarPaciente(id: ID!): Boolean
+    atualizarPaciente(id: ID!, request: PacienteRequestDto!): PacienteResponseDto
+    criarMedico(request: MedicoRequestDto!): MedicoResponseDto
+    apagarMedico(id: ID!): Boolean
+    atualizarMedico(id: ID!, request: MedicoRequestDto!): MedicoResponseDto
+    criarEnfermeiro(request: EnfermeiroRequestDto!): EnfermeiroResponseDto
+    apagarEnfermeiro(id: ID!): Boolean
+    atualizarEnfermeiro(id: ID!, request: EnfermeiroRequestDto!): EnfermeiroResponseDto
+    agendarConsulta(request: ConsultaRequestDto!): ConsultaResponseDto
 }
 
