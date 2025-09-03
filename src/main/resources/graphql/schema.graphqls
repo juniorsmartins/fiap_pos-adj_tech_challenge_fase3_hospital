@@ -1,16 +1,3 @@
-#type Role {
-#    id: ID!,
-#    nome: String!
-#}
-
-#type User {
-#    id: ID!,
-#    username: String!
-#    password: String!
-#    enabled: Boolean!
-#    roles: [RoleDao!]!
-#}
-
 input UserRequestDto {
     username: String!
     password: String!
@@ -36,17 +23,6 @@ input ConsultaRequestDto {
     medicoId: ID!
     pacienteId: ID!
 }
-
-
-#type Paciente {
-#    id: ID!
-#    nome: String!
-#}
-#
-#type Medico {
-#    id: ID!
-#    nome: String!
-#}
 
 
 type RoleResponseDto {
@@ -95,6 +71,7 @@ type Query {
     consultarEnfermeiroPorId(id: ID!): EnfermeiroResponseDto!
     consultarConsultaPorId(id: ID!): ConsultaResponseDto!
 }
+
 
 type Mutation {
     criarPaciente(request: PacienteRequestDto!): PacienteResponseDto
