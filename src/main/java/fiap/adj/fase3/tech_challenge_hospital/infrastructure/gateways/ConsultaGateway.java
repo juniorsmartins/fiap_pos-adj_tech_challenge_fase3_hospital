@@ -25,4 +25,11 @@ public class ConsultaGateway implements ConsultaOutputPort {
                 .map(ConsultaPresenter::converterDaoParaDto)
                 .orElseThrow();
     }
+
+    @Transactional
+    @Override
+    public Optional<ConsultaDto> consultaPorId(Long id) {
+        return consultaRepository.findById(id)
+                .map(ConsultaPresenter::converterDaoParaDto);
+    }
 }

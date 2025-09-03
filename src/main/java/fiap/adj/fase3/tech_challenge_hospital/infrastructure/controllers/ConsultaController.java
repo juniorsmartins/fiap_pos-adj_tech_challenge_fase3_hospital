@@ -10,6 +10,7 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.presenters.Consulta
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
@@ -30,6 +31,13 @@ public class ConsultaController {
     public ConsultaResponseDto agendarConsulta(@Argument ConsultaRequestDto request) {
         return Optional.ofNullable(request)
                 .map(dto -> consultaInputPort.agendar(dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
+                .map(ConsultaPresenter::converterDtoParaResponse)
+                .orElseThrow();
+    }
+
+    @QueryMapping
+    public ConsultaResponseDto consultarConsultaPorId(@Argument Long id) {
+        return consultaOutputPort.consultaPorId(id)
                 .map(ConsultaPresenter::converterDtoParaResponse)
                 .orElseThrow();
     }
