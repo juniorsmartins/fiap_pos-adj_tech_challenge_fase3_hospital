@@ -28,8 +28,8 @@ public class ConsultaGateway implements ConsultaOutputPort {
 
     @Transactional
     @Override
-    public Optional<ConsultaDto> consultaPorId(Long id) {
-        return consultaRepository.findById(id)
+    public Optional<ConsultaDto> consultarPorIdAndStatus(Long id, String status) {
+        return consultaRepository.findByIdAndStatus(id, status)
                 .map(ConsultaPresenter::converterDaoParaDto);
     }
 }

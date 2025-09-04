@@ -7,15 +7,15 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.ConsultaDao;
 public final class ConsultaPresenter {
 
     public static ConsultaResponseDto converterDtoParaResponse(ConsultaDto dto) {
-        var medicoResponse = MedicoPresenter.converterDtoParaResponse(dto.medico());
-        var pacienteResponse = PacientePresenter.converterDtoParaResponse(dto.paciente());
-        return new ConsultaResponseDto(dto.id(), dto.dataHora(), dto.status(), medicoResponse, pacienteResponse);
+        var medicoResponse = MedicoPresenter.converterDtoParaResponse(dto.getMedico());
+        var pacienteResponse = PacientePresenter.converterDtoParaResponse(dto.getPaciente());
+        return new ConsultaResponseDto(dto.getId(), dto.getDataHora(), dto.getStatus(), medicoResponse, pacienteResponse);
     }
 
     public static ConsultaDao converterDtoParaDao(ConsultaDto dto) {
-        var medicoDao = MedicoPresenter.converterDtoParaDao(dto.medico());
-        var pacienteDao = PacientePresenter.converterDtoParaDao(dto.paciente());
-        return new ConsultaDao(dto.id(), dto.dataHora(), dto.status(), medicoDao, pacienteDao);
+        var medicoDao = MedicoPresenter.converterDtoParaDao(dto.getMedico());
+        var pacienteDao = PacientePresenter.converterDtoParaDao(dto.getPaciente());
+        return new ConsultaDao(dto.getId(), dto.getDataHora(), dto.getStatus(), medicoDao, pacienteDao);
     }
 
     public static ConsultaDto converterDaoParaDto(ConsultaDao dao) {

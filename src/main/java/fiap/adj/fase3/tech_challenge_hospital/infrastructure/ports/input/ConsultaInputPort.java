@@ -9,4 +9,8 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.Pacien
 public interface ConsultaInputPort {
 
     ConsultaDto agendar(ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort);
+
+    ConsultaDto consultarPorId(Long id, ConsultaOutputPort consultaOutputPort);
+
+    void concluir(Long id, ConsultaOutputPort consultaOutputPort);
 }

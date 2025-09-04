@@ -8,5 +8,5 @@ public interface ConsultaOutputPort {
 
     ConsultaDto salvar(ConsultaDto dto);
 
-    Optional<ConsultaDto> consultaPorId(Long id);
+    Optional<ConsultaDto> consultarPorIdAndStatus(Long id, String status);
 }

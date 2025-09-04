@@ -37,8 +37,15 @@ public class ConsultaController {
 
     @QueryMapping
     public ConsultaResponseDto consultarConsultaPorId(@Argument Long id) {
-        return consultaOutputPort.consultaPorId(id)
+        return Optional.ofNullable(id)
+                .map(codigo -> consultaInputPort.consultarPorId(codigo, consultaOutputPort))
                 .map(ConsultaPresenter::converterDtoParaResponse)
                 .orElseThrow();
+    }
+
+    @MutationMapping
+    public Boolean concluirConsulta(@Argument Long id) {
+        consultaInputPort.concluir(id, consultaOutputPort);
+        return true;
     }
 }
