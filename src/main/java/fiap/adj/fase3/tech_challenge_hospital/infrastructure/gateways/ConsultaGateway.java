@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,5 +33,13 @@ public class ConsultaGateway implements ConsultaOutputPort {
     public Optional<ConsultaDto> consultarPorIdAndStatus(Long id, String status) {
         return consultaRepository.findByIdAndStatus(id, status)
                 .map(ConsultaPresenter::converterDaoParaDto);
+    }
+
+    @Override
+    public Set<ConsultaDto> consultarHistoricoPorId(Long id) {
+        return consultaRepository.findAllByPacienteId(id)
+                .stream()
+                .map(ConsultaPresenter::converterDaoParaDto)
+                .collect(Collectors.toSet());
     }
 }

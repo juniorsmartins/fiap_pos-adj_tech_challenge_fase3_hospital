@@ -70,6 +70,7 @@ type Query {
     consultarMedicoPorId(id: ID!): MedicoResponseDto!
     consultarEnfermeiroPorId(id: ID!): EnfermeiroResponseDto!
     consultarConsultaPorId(id: ID!): ConsultaResponseDto!
+    consultarHistoricoPorIdPaciente(id: ID!): [ConsultaResponseDto!]!
 }
 
 

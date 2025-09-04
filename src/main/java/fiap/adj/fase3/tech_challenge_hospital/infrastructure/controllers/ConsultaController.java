@@ -13,7 +13,11 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,5 +57,14 @@ public class ConsultaController {
     public Boolean cancelarConsulta(@Argument Long id) {
         consultaInputPort.cancelar(id, consultaOutputPort);
         return true;
+    }
+
+    @QueryMapping
+    public Set<ConsultaResponseDto> consultarHistoricoPorIdPaciente(@Argument Long id) {
+        return consultaOutputPort.consultarHistoricoPorId(id)
+                .stream()
+                .map(ConsultaPresenter::converterDtoParaResponse)
+                .sorted(Comparator.comparing(ConsultaResponseDto::dataHora, Comparator.reverseOrder()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }
