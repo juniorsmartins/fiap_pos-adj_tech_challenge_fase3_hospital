@@ -44,4 +44,16 @@ public class ConsultaUseCase implements ConsultaInputPort {
                     throw new RuntimeException();
                 });
     }
+
+    @Transactional
+    @Override
+    public void cancelar(Long id, ConsultaOutputPort consultaOutputPort) {
+        consultaOutputPort.consultarPorIdAndStatus(id, ConsultaStatusEnum.AGENDADO.getValue())
+                .ifPresentOrElse(dto -> {
+                    dto.setStatus(ConsultaStatusEnum.CANCELADO.getValue());
+                    consultaOutputPort.salvar(dto);
+                }, () -> {
+                    throw new RuntimeException();
+                });
+    }
 }

@@ -48,4 +48,10 @@ public class ConsultaController {
         consultaInputPort.concluir(id, consultaOutputPort);
         return true;
     }
+
+    @MutationMapping
+    public Boolean cancelarConsulta(@Argument Long id) {
+        consultaInputPort.cancelar(id, consultaOutputPort);
+        return true;
+    }
 }

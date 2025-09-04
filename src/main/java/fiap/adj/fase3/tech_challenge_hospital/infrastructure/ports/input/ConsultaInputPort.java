@@ -13,4 +13,6 @@ public interface ConsultaInputPort {
     ConsultaDto consultarPorId(Long id, ConsultaOutputPort consultaOutputPort);
 
     void concluir(Long id, ConsultaOutputPort consultaOutputPort);
+
+    void cancelar(Long id, ConsultaOutputPort consultaOutputPort);
 }
