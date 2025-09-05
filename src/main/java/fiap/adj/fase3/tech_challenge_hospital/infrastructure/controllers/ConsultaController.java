@@ -39,6 +39,14 @@ public class ConsultaController {
                 .orElseThrow();
     }
 
+    @MutationMapping
+    public ConsultaResponseDto modificarConsulta(@Argument Long id, @Argument ConsultaRequestDto request) {
+        return Optional.ofNullable(request)
+                .map(dto -> consultaInputPort.modificar(id, dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
+                .map(ConsultaPresenter::converterDtoParaResponse)
+                .orElseThrow();
+    }
+
     @QueryMapping
     public ConsultaResponseDto consultarConsultaPorId(@Argument Long id) {
         return Optional.ofNullable(id)

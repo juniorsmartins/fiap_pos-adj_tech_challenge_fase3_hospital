@@ -26,6 +26,19 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 .orElseThrow();
     }
 
+    @Override
+    public ConsultaDto modificar(Long id, ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort) {
+        return consultaOutputPort.consultarPorIdAndStatus(id, ConsultaStatusEnum.AGENDADO.getValue())
+                .map(dtoDoBanco -> {
+                    var entity = Consulta.converterRequestParaEntity(request, ConsultaStatusEnum.AGENDADO, medicoOutputPort, pacienteOutputPort);
+                    entity.setId(dtoDoBanco.getId());
+                    return entity;
+                })
+                .map(Consulta::converterEntityParaDto)
+                .map(consultaOutputPort::salvar)
+                .orElseThrow();
+    }
+
     @Transactional
     @Override
     public ConsultaDto consultarPorId(Long id, ConsultaOutputPort consultaOutputPort) {

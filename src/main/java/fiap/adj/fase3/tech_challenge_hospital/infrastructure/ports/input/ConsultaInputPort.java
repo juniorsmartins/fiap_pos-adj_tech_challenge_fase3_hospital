@@ -10,6 +10,8 @@ public interface ConsultaInputPort {
 
     ConsultaDto agendar(ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort);
 
+    ConsultaDto modificar(Long id, ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort);
+
     ConsultaDto consultarPorId(Long id, ConsultaOutputPort consultaOutputPort);
 
     void concluir(Long id, ConsultaOutputPort consultaOutputPort);

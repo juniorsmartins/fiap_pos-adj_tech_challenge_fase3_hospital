@@ -88,5 +88,6 @@ type Mutation {
     atualizarConsulta(id: ID!, request: ConsultaRequestDto!): ConsultaResponseDto
     concluirConsulta(id: ID!): Boolean
     cancelarConsulta(id: ID!): Boolean
+    modificarConsulta(id: ID!, request: ConsultaRequestDto!): ConsultaResponseDto
 }
 
