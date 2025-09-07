@@ -35,11 +35,19 @@ public class ConsultaGateway implements ConsultaOutputPort {
                 .map(ConsultaPresenter::converterDaoParaDto);
     }
 
+    @Transactional
     @Override
-    public Set<ConsultaDto> consultarHistoricoPorId(Long id) {
+    public Set<ConsultaDto> buscarHistoricoDeConsultasPorId(Long id) {
         return consultaRepository.findAllByPacienteId(id)
                 .stream()
                 .map(ConsultaPresenter::converterDaoParaDto)
                 .collect(Collectors.toSet());
+    }
+
+    @Transactional
+    @Override
+    public Optional<ConsultaDto> consultarPorIdComStatusNot(Long id, String status) {
+        return consultaRepository.findByIdAndStatusNot(id, status)
+                .map(ConsultaPresenter::converterDaoParaDto);
     }
 }

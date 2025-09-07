@@ -68,8 +68,8 @@ public class ConsultaController {
     }
 
     @QueryMapping
-    public Set<ConsultaResponseDto> consultarHistoricoPorIdPaciente(@Argument Long id) {
-        return consultaOutputPort.consultarHistoricoPorId(id)
+    public Set<ConsultaResponseDto> buscarHistoricoDeConsultasPorIdPaciente(@Argument Long id) {
+        return consultaOutputPort.buscarHistoricoDeConsultasPorId(id)
                 .stream()
                 .map(ConsultaPresenter::converterDtoParaResponse)
                 .sorted(Comparator.comparing(ConsultaResponseDto::dataHora, Comparator.reverseOrder()))

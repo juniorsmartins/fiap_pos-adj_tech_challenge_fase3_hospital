@@ -11,4 +11,6 @@ public interface ConsultaRepository extends JpaRepository<ConsultaDao, Long> {
     Optional<ConsultaDao> findByIdAndStatus(Long id, String status);
 
     Set<ConsultaDao> findAllByPacienteId(Long pacienteId);
+
+    Optional<ConsultaDao> findByIdAndStatusNot(Long id, String status);
 }

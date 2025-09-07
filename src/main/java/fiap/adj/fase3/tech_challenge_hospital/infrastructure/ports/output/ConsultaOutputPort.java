@@ -11,5 +11,7 @@ public interface ConsultaOutputPort {
 
     Optional<ConsultaDto> consultarPorIdAndStatus(Long id, String status);
 
-    Set<ConsultaDto> consultarHistoricoPorId(Long id);
+    Set<ConsultaDto> buscarHistoricoDeConsultasPorId(Long id);
+
+    Optional<ConsultaDto> consultarPorIdComStatusNot(Long id, String status);
 }
