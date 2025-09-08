@@ -47,7 +47,7 @@ public final class Consulta {
     public static Consulta converterDtoParaEntity(ConsultaDto dto) {
         var medico = Medico.converterDtoParaEntity(dto.getMedico());
         var paciente = Paciente.converterDtoParaEntity(dto.getPaciente());
-        return new Consulta(dto.getDataHora(), ConsultaStatusEnum.valueOf(dto.getStatus()), medico, paciente);
+        return new Consulta(dto.getId(), dto.getDataHora(), ConsultaStatusEnum.valueOf(dto.getStatus()), medico, paciente);
     }
 
     private static LocalDateTime converterDataHora(String dataHora) {

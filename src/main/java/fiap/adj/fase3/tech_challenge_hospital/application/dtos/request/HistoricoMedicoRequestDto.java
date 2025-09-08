@@ -1,5 +1,6 @@
 package fiap.adj.fase3.tech_challenge_hospital.application.dtos.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public final class HistoricoMedicoRequestDto {
 
     private String exames;
 
+    @NotNull
     private Long consultaId;
 }
