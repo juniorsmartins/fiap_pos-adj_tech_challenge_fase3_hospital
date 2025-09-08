@@ -27,7 +27,7 @@ public final class HistoricoMedicoDao {
     @Column(columnDefinition = "TEXT")
     private String exames;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY, targetEntity = ConsultaDao.class, optional = false)
     @JoinColumn(name = "consulta", nullable = false)
     private ConsultaDao consulta;
 }

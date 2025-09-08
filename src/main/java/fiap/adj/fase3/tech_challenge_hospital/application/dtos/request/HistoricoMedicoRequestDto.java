@@ -17,5 +17,5 @@ public final class HistoricoMedicoRequestDto {
 
     private String exames;
 
-    private Long consulta;
+    private Long consultaId;
 }

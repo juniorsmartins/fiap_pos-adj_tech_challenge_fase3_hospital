@@ -24,11 +24,11 @@ input ConsultaRequestDto {
     pacienteId: ID!
 }
 
-input HistoricoRequestDto {
+input HistoricoMedicoRequestDto {
     diagnostico: String!
     prescricao: String!
     exames: String
-    consulta: ID!
+    consultaId: ID!
 }
 
 
@@ -71,7 +71,7 @@ type ConsultaResponseDto {
     paciente: PacienteResponseDto
 }
 
-type HistoricoResponseDto {
+type HistoricoMedicoResponseDto {
     id: ID
     diagnostico: String
     prescricao: String
@@ -86,8 +86,8 @@ type Query {
     consultarEnfermeiroPorId(id: ID!): EnfermeiroResponseDto!
     consultarConsultaPorId(id: ID!): ConsultaResponseDto!
     buscarHistoricoDeConsultasPorIdPaciente(id: ID!): [ConsultaResponseDto!]!
-    consultarHistoricoMedicoPorIdConsulta(id: ID!): HistoricoResponseDto!
-    listarHistoricoMedicoPorIdPaciente(id: ID!): [HistoricoResponseDto!]!
+    consultarHistoricoMedicoPorIdConsulta(id: ID!): HistoricoMedicoResponseDto!
+    listarHistoricoMedicoPorIdPaciente(id: ID!): [HistoricoMedicoResponseDto!]!
 }
 
 
@@ -106,6 +106,6 @@ type Mutation {
     concluirConsulta(id: ID!): Boolean
     cancelarConsulta(id: ID!): Boolean
     modificarConsulta(id: ID!, request: ConsultaRequestDto!): ConsultaResponseDto
-    criarHistoricoMedico(request: HistoricoRequestDto!): HistoricoResponseDto
+    criarHistoricoMedico(request: HistoricoMedicoRequestDto!): HistoricoMedicoResponseDto
 }
 

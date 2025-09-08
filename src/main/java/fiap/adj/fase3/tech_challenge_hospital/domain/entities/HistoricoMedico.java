@@ -33,7 +33,7 @@ public final class HistoricoMedico {
     }
 
     public static HistoricoMedico converterRequestParaEntity(HistoricoMedicoRequestDto request, ConsultaOutputPort consultaOutputPort) {
-        var consulta = consultaOutputPort.consultarPorIdComStatusNot(request.getConsulta(), ConsultaStatusEnum.CANCELADO.getValue())
+        var consulta = consultaOutputPort.consultarPorIdComStatusNot(request.getConsultaId(), ConsultaStatusEnum.CANCELADO.getValue())
                 .map(Consulta::converterDtoParaEntity)
                 .orElseThrow();
         return new HistoricoMedico(request.getDiagnostico(), request.getPrescricao(), request.getExames(), consulta);
