@@ -11,9 +11,12 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.Pacien
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,5 +38,13 @@ public class HistoricoMedicoController {
                 .map(dto -> historicoMedicoInputPort.criar(dto, consultaOutputPort, historicoMedicoOutputPort))
                 .map(HistoricoMedicoPresenter::converterDtoParaResponse)
                 .orElseThrow();
+    }
+
+    @QueryMapping
+    public Set<HistoricoMedicoResponseDto> listarHistoricoMedicoPorIdPaciente(@Argument Long id) {
+        return historicoMedicoOutputPort.listarHistoricoMedicoPorIdPaciente(id)
+                .stream()
+                .map(HistoricoMedicoPresenter::converterDtoParaResponse)
+                .collect(Collectors.toSet());
     }
 }

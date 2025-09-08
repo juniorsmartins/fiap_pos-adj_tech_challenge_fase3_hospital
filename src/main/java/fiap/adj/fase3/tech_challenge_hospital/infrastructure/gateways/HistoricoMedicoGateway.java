@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,5 +26,13 @@ public class HistoricoMedicoGateway implements HistoricoMedicoOutputPort {
                 .map(historicoMedicoRepository::save)
                 .map(HistoricoMedicoPresenter::converterDaoParaDto)
                 .orElseThrow();
+    }
+
+    @Override
+    public Set<HistoricoMedicoDto> listarHistoricoMedicoPorIdPaciente(Long id) {
+        return historicoMedicoRepository.listarHistoricoMedicoPorIdPaciente(id)
+                .stream()
+                .map(HistoricoMedicoPresenter::converterDaoParaDto)
+                .collect(Collectors.toSet());
     }
 }
