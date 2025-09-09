@@ -35,12 +35,12 @@ class PacienteControllerIntegrationTest {
     @Autowired
     private PacienteRepository repository;
 
-    private PacienteDao pacienteDao;
+    private PacienteDao dao;
 
     @BeforeEach
     void setUp() {
-        pacienteDao = UtilPacienteTest.montarPacienteDao(NOME_INICIAL, USERNAME, PASSWORD);
-        repository.save(pacienteDao);
+        dao = UtilPacienteTest.montarPacienteDao(NOME_INICIAL, USERNAME, PASSWORD);
+        repository.save(dao);
     }
 
     @Nested
@@ -72,10 +72,10 @@ class PacienteControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoConsultarPorId_entaoRetornarResponseValido() {
-            var response = controller.consultarPacientePorId(pacienteDao.getId());
-            assertEquals(pacienteDao.getId(), response.id());
-            assertEquals(pacienteDao.getNome(), response.nome());
-            assertEquals(pacienteDao.getUser().getUsername(), response.user().username());
+            var response = controller.consultarPacientePorId(dao.getId());
+            assertEquals(dao.getId(), response.id());
+            assertEquals(dao.getNome(), response.nome());
+            assertEquals(dao.getUser().getUsername(), response.user().username());
         }
     }
 
@@ -85,13 +85,13 @@ class PacienteControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoApagarPorId_entaoRetornarTrue() {
-            var response = controller.apagarPaciente(pacienteDao.getId());
+            var response = controller.apagarPaciente(dao.getId());
             assertTrue(response);
         }
 
         @Test
         void dadoIdValido_quandoApagarPorId_entaoDeletarDoBanco() {
-            var id = pacienteDao.getId();
+            var id = dao.getId();
             var dao = repository.findById(id);
             assertFalse(dao.isEmpty());
 
@@ -109,14 +109,14 @@ class PacienteControllerIntegrationTest {
 
         @Test
         void dadoRequisicaoValida_quandoAtualizar_entaoRetornarResponseValido() {
-            var desatualizado = repository.findById(pacienteDao.getId());
+            var desatualizado = repository.findById(dao.getId());
             assertFalse(desatualizado.isEmpty());
             assertEquals(NOME_INICIAL, desatualizado.get().getNome());
             assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
             assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
 
             var atualizado = UtilPacienteTest.montarPacienteRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
-            var response = controller.atualizarPaciente(pacienteDao.getId(), atualizado);
+            var response = controller.atualizarPaciente(dao.getId(), atualizado);
 
             assertEquals(atualizado.getNome(), response.nome());
             assertEquals(atualizado.getUser().getUsername(), response.user().username());
@@ -128,14 +128,14 @@ class PacienteControllerIntegrationTest {
 
         @Test
         void dadoRequisicaoValida_quandoAtualizar_entaoAtualizarNoBanco() {
-            var desatualizado = repository.findById(pacienteDao.getId());
+            var desatualizado = repository.findById(dao.getId());
             assertFalse(desatualizado.isEmpty());
             assertEquals(NOME_INICIAL, desatualizado.get().getNome());
             assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
             assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
 
             var atualizado = UtilPacienteTest.montarPacienteRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
-            var response = controller.atualizarPaciente(pacienteDao.getId(), atualizado);
+            var response = controller.atualizarPaciente(dao.getId(), atualizado);
 
             var doBanco = repository.findById(response.id()).get();
 

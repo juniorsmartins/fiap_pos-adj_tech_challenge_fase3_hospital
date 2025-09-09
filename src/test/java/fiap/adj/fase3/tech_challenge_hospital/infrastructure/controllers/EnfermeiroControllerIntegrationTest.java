@@ -1,8 +1,8 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
-import fiap.adj.fase3.tech_challenge_hospital.UtilMedicoTest;
-import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
-import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.MedicoRepository;
+import fiap.adj.fase3.tech_challenge_hospital.UtilEnfermeiroTest;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.EnfermeiroDao;
+import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.EnfermeiroRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,31 +15,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class MedicoControllerIntegrationTest {
+class EnfermeiroControllerIntegrationTest {
 
-    private static final String NOME_INICIAL = "Médico Inicial";
+    private static final String NOME_INICIAL = "Enfermeiro Inicial";
 
     private static final String USERNAME = "username123";
 
     private static final String PASSWORD = "password123";
 
-    private static final String NOME_ATUAL = "Médico Atual";
+    private static final String NOME_ATUAL = "Enfermeiro Atual";
 
     private static final String USERNAME_ATUAL = "username999";
 
     private static final String PASSWORD_ATUAL = "password999";
 
     @Autowired
-    private MedicoController controller;
+    private EnfermeiroController controller;
 
     @Autowired
-    private MedicoRepository repository;
+    private EnfermeiroRepository repository;
 
-    private MedicoDao dao;
+    private EnfermeiroDao dao;
 
     @BeforeEach
     void setUp() {
-        dao = UtilMedicoTest.montarMedicoDao(NOME_INICIAL, USERNAME, PASSWORD);
+        dao = UtilEnfermeiroTest.montarEnfermeiroDao(NOME_INICIAL, USERNAME, PASSWORD);
         repository.save(dao);
     }
 
@@ -50,9 +50,9 @@ class MedicoControllerIntegrationTest {
         @Test
         void dadoRequisicaoValida_quandoCriar_entaoRetornarResponseComDadosValidos() {
             // Arrange
-            var requestDto = UtilMedicoTest.montarMedicoRequestDto(NOME_INICIAL, USERNAME, PASSWORD);
+            var requestDto = UtilEnfermeiroTest.montarEnfermeiroRequestDto(NOME_INICIAL, USERNAME, PASSWORD);
             // Act
-            var response = controller.criarMedico(requestDto);
+            var response = controller.criarEnfermeiro(requestDto);
             // Assert
             assertNotNull(response.id());
             assertEquals(requestDto.getNome(), response.nome());
@@ -61,8 +61,8 @@ class MedicoControllerIntegrationTest {
 
         @Test
         void dadoRequisicaoValida_quandoCriar_entaoSalvarDadosValidosNoBanco() {
-            var requestDto = UtilMedicoTest.montarMedicoRequestDto(NOME_INICIAL, USERNAME, PASSWORD);
-            var response = controller.criarMedico(requestDto);
+            var requestDto = UtilEnfermeiroTest.montarEnfermeiroRequestDto(NOME_INICIAL, USERNAME, PASSWORD);
+            var response = controller.criarEnfermeiro(requestDto);
             var dadoSalvo = repository.findById(response.id()).orElseThrow();
             assertEquals(requestDto.getNome(), dadoSalvo.getNome());
             assertEquals(requestDto.getUser().getUsername(), dadoSalvo.getUser().getUsername());
@@ -75,7 +75,7 @@ class MedicoControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoConsultarPorId_entaoRetornarResponseValido() {
-            var response = controller.consultarMedicoPorId(dao.getId());
+            var response = controller.consultarEnfermeiroPorId(dao.getId());
             assertEquals(dao.getId(), response.id());
             assertEquals(dao.getNome(), response.nome());
             assertEquals(dao.getUser().getUsername(), response.user().username());
@@ -88,7 +88,7 @@ class MedicoControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoApagarPorId_entaoRetornarTrue() {
-            var response = controller.apagarMedico(dao.getId());
+            var response = controller.apagarEnfermeiro(dao.getId());
             assertTrue(response);
         }
 
@@ -98,7 +98,7 @@ class MedicoControllerIntegrationTest {
             var dao = repository.findById(id);
             assertFalse(dao.isEmpty());
 
-            var response = controller.apagarMedico(id);
+            var response = controller.apagarEnfermeiro(id);
             assertTrue(response);
 
             var daoApagado = repository.findById(id);
@@ -118,8 +118,8 @@ class MedicoControllerIntegrationTest {
             assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
             assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
 
-            var atualizado = UtilMedicoTest.montarMedicoRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
-            var response = controller.atualizarMedico(dao.getId(), atualizado);
+            var atualizado = UtilEnfermeiroTest.montarEnfermeiroRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
+            var response = controller.atualizarEnfermeiro(dao.getId(), atualizado);
 
             assertEquals(atualizado.getNome(), response.nome());
             assertEquals(atualizado.getUser().getUsername(), response.user().username());
@@ -137,8 +137,8 @@ class MedicoControllerIntegrationTest {
             assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
             assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
 
-            var atualizado = UtilMedicoTest.montarMedicoRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
-            var response = controller.atualizarMedico(dao.getId(), atualizado);
+            var atualizado = UtilEnfermeiroTest.montarEnfermeiroRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
+            var response = controller.atualizarEnfermeiro(dao.getId(), atualizado);
 
             var doBanco = repository.findById(response.id()).get();
 
