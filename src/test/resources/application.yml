@@ -18,10 +18,14 @@ spring:
     defer-datasource-initialization: true
     show-sql: true
 
-  sql: # Habilita ou desabilita acionamento de script SQL
+#  sql: # Habilita ou desabilita acionamento de script SQL
+#    init:
+#      mode: never
+#      data-locations: []
+  sql: # Esta propriedade controla quando e como o Spring Boot inicializa o banco de dados com scripts SQL
     init:
-      mode: never
-      data-locations: []
+      mode: always
+      data-locations: classpath:db/data.sql
 
   # Habilitar o console do H2 (opcional)
   h2:

@@ -43,7 +43,7 @@ public final class Medico {
 
     }
 
-    public static Medico regraAtualizar(MedicoDto dto, MedicoRequestDto request) {
+    public static Medico regraAtualizar(MedicoRequestDto request, MedicoDto dto) {
 
         var userRequest = request.getUser();
         var usuario = new Usuario(userRequest.getUsername(), userRequest.getPassword());
