@@ -17,11 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class PacienteControllerIntegrationTest {
 
-    private static final String NOME_PACIENTE1 = "Paciente 1";
+    private static final String NOME_INICIAL = "Paciente Inicial";
 
     private static final String USERNAME = "username123";
 
     private static final String PASSWORD = "password123";
+
+    private static final String NOME_ATUAL = "Paciente Atual";
+
+    private static final String USERNAME_ATUAL = "username999";
+
+    private static final String PASSWORD_ATUAL = "password999";
 
     @Autowired
     private PacienteController controller;
@@ -33,7 +39,7 @@ class PacienteControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        pacienteDao = UtilPacienteTest.montarPacienteDao(NOME_PACIENTE1, USERNAME, PASSWORD);
+        pacienteDao = UtilPacienteTest.montarPacienteDao(NOME_INICIAL, USERNAME, PASSWORD);
         repository.save(pacienteDao);
     }
 
@@ -43,7 +49,7 @@ class PacienteControllerIntegrationTest {
 
         @Test
         void dadoRequisicaoValida_quandoCriar_entaoRetornarResponseComDadosValidos() {
-            var requestDto = UtilPacienteTest.montarPacienteRequestDto(NOME_PACIENTE1, USERNAME, PASSWORD);
+            var requestDto = UtilPacienteTest.montarPacienteRequestDto(NOME_INICIAL, USERNAME, PASSWORD);
             var response = controller.criarPaciente(requestDto);
             assertNotNull(response.id());
             assertEquals(requestDto.getNome(), response.nome());
@@ -52,7 +58,7 @@ class PacienteControllerIntegrationTest {
 
         @Test
         void dadoRequisicaoValida_quandoCriar_entaoSalvarDadosValidosNoBanco() {
-            var requestDto = UtilPacienteTest.montarPacienteRequestDto(NOME_PACIENTE1, USERNAME, PASSWORD);
+            var requestDto = UtilPacienteTest.montarPacienteRequestDto(NOME_INICIAL, USERNAME, PASSWORD);
             var response = controller.criarPaciente(requestDto);
             var dadoSalvo = repository.findById(response.id()).orElseThrow();
             assertEquals(requestDto.getNome(), dadoSalvo.getNome());
@@ -105,19 +111,40 @@ class PacienteControllerIntegrationTest {
         void dadoRequisicaoValida_quandoAtualizar_entaoRetornarResponseValido() {
             var desatualizado = repository.findById(pacienteDao.getId());
             assertFalse(desatualizado.isEmpty());
-            assertEquals(NOME_PACIENTE1, desatualizado.get().getNome());
+            assertEquals(NOME_INICIAL, desatualizado.get().getNome());
             assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
             assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
 
-            var atualizado = UtilPacienteTest
-                    .montarPacienteRequestDto("PacienteAtual", "username999", "password999");
+            var atualizado = UtilPacienteTest.montarPacienteRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
             var response = controller.atualizarPaciente(pacienteDao.getId(), atualizado);
 
             assertEquals(atualizado.getNome(), response.nome());
             assertEquals(atualizado.getUser().getUsername(), response.user().username());
             assertEquals(atualizado.getUser().getPassword(), response.user().password());
-            assertNotEquals(NOME_PACIENTE1, response.nome());
+            assertNotEquals(NOME_INICIAL, response.nome());
             assertNotEquals(USERNAME, response.user().username());
+            assertNotEquals(PASSWORD, response.user().password());
+        }
+
+        @Test
+        void dadoRequisicaoValida_quandoAtualizar_entaoAtualizarNoBanco() {
+            var desatualizado = repository.findById(pacienteDao.getId());
+            assertFalse(desatualizado.isEmpty());
+            assertEquals(NOME_INICIAL, desatualizado.get().getNome());
+            assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
+            assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
+
+            var atualizado = UtilPacienteTest.montarPacienteRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
+            var response = controller.atualizarPaciente(pacienteDao.getId(), atualizado);
+
+            var doBanco = repository.findById(response.id()).get();
+
+            assertEquals(doBanco.getNome(), response.nome());
+            assertEquals(doBanco.getUser().getUsername(), response.user().username());
+            assertEquals(doBanco.getUser().getPassword(), response.user().password());
+            assertNotEquals(NOME_INICIAL, doBanco.getNome());
+            assertNotEquals(USERNAME, doBanco.getUser().getUsername());
+            assertNotEquals(PASSWORD, doBanco.getUser().getPassword());
         }
     }
 }
