@@ -85,7 +85,7 @@ type Query {
     consultarMedicoPorId(id: ID!): MedicoResponseDto!
     consultarEnfermeiroPorId(id: ID!): EnfermeiroResponseDto!
     consultarConsultaPorId(id: ID!): ConsultaResponseDto!
-    buscarHistoricoDeConsultasPorIdPaciente(id: ID!): [ConsultaResponseDto!]!
+    listarHistoricoDeConsultasPorIdPaciente(id: ID!): [ConsultaResponseDto!]!
     consultarHistoricoMedicoPorIdConsulta(id: ID!): HistoricoMedicoResponseDto!
     listarHistoricoMedicoPorIdPaciente(id: ID!): [HistoricoMedicoResponseDto!]!
 }
@@ -95,17 +95,20 @@ type Mutation {
     criarPaciente(request: PacienteRequestDto!): PacienteResponseDto
     apagarPaciente(id: ID!): Boolean
     atualizarPaciente(id: ID!, request: PacienteRequestDto!): PacienteResponseDto
+
     criarMedico(request: MedicoRequestDto!): MedicoResponseDto
     apagarMedico(id: ID!): Boolean
     atualizarMedico(id: ID!, request: MedicoRequestDto!): MedicoResponseDto
+
     criarEnfermeiro(request: EnfermeiroRequestDto!): EnfermeiroResponseDto
     apagarEnfermeiro(id: ID!): Boolean
     atualizarEnfermeiro(id: ID!, request: EnfermeiroRequestDto!): EnfermeiroResponseDto
+
     agendarConsulta(request: ConsultaRequestDto!): ConsultaResponseDto
     atualizarConsulta(id: ID!, request: ConsultaRequestDto!): ConsultaResponseDto
     concluirConsulta(id: ID!): Boolean
     cancelarConsulta(id: ID!): Boolean
-    modificarConsulta(id: ID!, request: ConsultaRequestDto!): ConsultaResponseDto
+
     criarHistoricoMedico(request: HistoricoMedicoRequestDto!): HistoricoMedicoResponseDto
 }
 

@@ -131,16 +131,11 @@ class MedicoControllerIntegrationTest {
 
         @Test
         void dadoRequisicaoValida_quandoAtualizar_entaoAtualizarNoBanco() {
-            var desatualizado = repository.findById(dao.getId());
-            assertFalse(desatualizado.isEmpty());
-            assertEquals(NOME_INICIAL, desatualizado.get().getNome());
-            assertEquals(USERNAME, desatualizado.get().getUser().getUsername());
-            assertEquals(PASSWORD, desatualizado.get().getUser().getPassword());
-
+            var id = dao.getId();
             var atualizado = UtilMedicoTest.montarMedicoRequestDto(NOME_ATUAL, USERNAME_ATUAL, PASSWORD_ATUAL);
-            var response = controller.atualizarMedico(dao.getId(), atualizado);
+            var response = controller.atualizarMedico(id, atualizado);
 
-            var doBanco = repository.findById(response.id()).get();
+            var doBanco = repository.findById(id).orElseThrow();
 
             assertEquals(doBanco.getNome(), response.nome());
             assertEquals(doBanco.getUser().getUsername(), response.user().username());

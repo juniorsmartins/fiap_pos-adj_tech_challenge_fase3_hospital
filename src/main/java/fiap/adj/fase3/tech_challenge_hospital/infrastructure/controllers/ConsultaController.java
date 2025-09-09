@@ -40,7 +40,7 @@ public class ConsultaController {
     }
 
     @MutationMapping
-    public ConsultaResponseDto modificarConsulta(@Argument Long id, @Argument ConsultaRequestDto request) {
+    public ConsultaResponseDto atualizarConsulta(@Argument Long id, @Argument ConsultaRequestDto request) {
         return Optional.ofNullable(request)
                 .map(dto -> consultaInputPort.modificar(id, dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
                 .map(ConsultaPresenter::converterDtoParaResponse)
@@ -68,7 +68,7 @@ public class ConsultaController {
     }
 
     @QueryMapping
-    public Set<ConsultaResponseDto> buscarHistoricoDeConsultasPorIdPaciente(@Argument Long id) {
+    public Set<ConsultaResponseDto> listarHistoricoDeConsultasPorIdPaciente(@Argument Long id) {
         return consultaOutputPort.buscarHistoricoDeConsultasPorId(id)
                 .stream()
                 .map(ConsultaPresenter::converterDtoParaResponse)
