@@ -31,6 +31,14 @@ input HistoricoMedicoRequestDto {
     consultaId: ID!
 }
 
+input FiltroHistoricoMedico {
+    id: ID
+    diagnostico: String
+    prescricao: String
+    exames: String
+    consultaId: ID
+}
+
 
 type RoleResponseDto {
     id: ID
@@ -92,6 +100,7 @@ type Query {
 
     consultarHistoricoMedicoPorIdConsulta(id: ID!): HistoricoMedicoResponseDto!
     listarHistoricoMedicoPorIdPaciente(id: ID!): [HistoricoMedicoResponseDto!]!
+    pesquisarHistoricoMedico(filtro: FiltroHistoricoMedico): [HistoricoMedicoResponseDto!]!
 }
 
 

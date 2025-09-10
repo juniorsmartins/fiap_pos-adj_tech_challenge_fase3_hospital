@@ -1,5 +1,6 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroHistoricoMedico;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.HistoricoMedicoRequestDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.response.HistoricoMedicoResponseDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.usecases.HistoricoMedicoPresenter;
@@ -52,6 +53,14 @@ public class HistoricoMedicoController {
     @QueryMapping
     public Set<HistoricoMedicoResponseDto> listarHistoricoMedicoPorIdPaciente(@Argument Long id) {
         return historicoMedicoOutputPort.listarHistoricoMedicoPorIdPaciente(id)
+                .stream()
+                .map(HistoricoMedicoPresenter::converterDtoParaResponse)
+                .collect(Collectors.toSet());
+    }
+
+    @QueryMapping
+    public Set<HistoricoMedicoResponseDto> pesquisarHistoricoMedico(@Argument FiltroHistoricoMedico filtro) {
+        return historicoMedicoOutputPort.pesquisar(filtro.id(), filtro.diagnostico(), filtro.prescricao(), filtro.exames(), filtro.consultaId())
                 .stream()
                 .map(HistoricoMedicoPresenter::converterDtoParaResponse)
                 .collect(Collectors.toSet());

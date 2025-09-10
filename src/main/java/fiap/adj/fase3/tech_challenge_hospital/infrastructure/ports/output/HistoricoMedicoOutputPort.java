@@ -12,4 +12,6 @@ public interface HistoricoMedicoOutputPort {
     Optional<HistoricoMedicoDto> consultarHistoricoMedicoPorIdConsulta(Long id);
 
     Set<HistoricoMedicoDto> listarHistoricoMedicoPorIdPaciente(Long id);
+
+    Set<HistoricoMedicoDto> pesquisar(Long id, String diagnostico, String prescricao, String exames, Long consultaId);
 }

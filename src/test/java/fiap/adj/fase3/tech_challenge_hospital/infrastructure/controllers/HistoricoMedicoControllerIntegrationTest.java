@@ -4,6 +4,7 @@ import fiap.adj.fase3.tech_challenge_hospital.UtilConsultaTest;
 import fiap.adj.fase3.tech_challenge_hospital.UtilHistoricoMedicoTest;
 import fiap.adj.fase3.tech_challenge_hospital.UtilMedicoTest;
 import fiap.adj.fase3.tech_challenge_hospital.UtilPacienteTest;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroHistoricoMedico;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.ConsultaDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
@@ -176,6 +177,165 @@ class HistoricoMedicoControllerIntegrationTest {
             assertEquals(DIAGNOSTICO, response.diagnostico());
             assertEquals(PRESCRICAO, response.prescricao());
             assertEquals(EXAMES, response.exames());
+        }
+    }
+
+    @Nested
+    @DisplayName("Pesquisar")
+    class Pesquisar {
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorId_entaoRetornarSetComUmHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            var response2 = controller.criarHistoricoMedico(request2);
+
+            var idHistorico = response2.id();
+            var filtro = new FiltroHistoricoMedico(idHistorico, null, null, null, null);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(1, resultado.size());
+            var historico = resultado.iterator().next();
+            assertEquals(idHistorico, historico.id());
+            assertEquals(DIAGNOSTICO_ATUAL, historico.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, historico.prescricao());
+            assertEquals(EXAMES_ATUAL, historico.exames());
+            assertEquals(idConsulta2, historico.consulta().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorDiagnostico_entaoRetornarSetComUmHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            var response2 = controller.criarHistoricoMedico(request2);
+
+            var parametroPesquisa = "co At";
+            var filtro = new FiltroHistoricoMedico(null, parametroPesquisa, null, null, null);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(1, resultado.size());
+            var historico = resultado.iterator().next();
+            assertEquals(response2.id(), historico.id());
+            assertEquals(DIAGNOSTICO_ATUAL, historico.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, historico.prescricao());
+            assertEquals(EXAMES_ATUAL, historico.exames());
+            assertEquals(idConsulta2, historico.consulta().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorPrescricao_entaoRetornarSetComUmHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            var response2 = controller.criarHistoricoMedico(request2);
+
+            var parametroPesquisa = "ção At";
+            var filtro = new FiltroHistoricoMedico(null, null, parametroPesquisa, null, null);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(1, resultado.size());
+            var historico = resultado.iterator().next();
+            assertEquals(response2.id(), historico.id());
+            assertEquals(DIAGNOSTICO_ATUAL, historico.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, historico.prescricao());
+            assertEquals(EXAMES_ATUAL, historico.exames());
+            assertEquals(idConsulta2, historico.consulta().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorExames_entaoRetornarSetComUmHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            var response2 = controller.criarHistoricoMedico(request2);
+
+            var parametroPesquisa = "mes At";
+            var filtro = new FiltroHistoricoMedico(null, null, null, parametroPesquisa, null);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(1, resultado.size());
+            var historico = resultado.iterator().next();
+            assertEquals(response2.id(), historico.id());
+            assertEquals(DIAGNOSTICO_ATUAL, historico.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, historico.prescricao());
+            assertEquals(EXAMES_ATUAL, historico.exames());
+            assertEquals(idConsulta2, historico.consulta().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorConsultaId_entaoRetornarSetComUmHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            var response2 = controller.criarHistoricoMedico(request2);
+
+            var filtro = new FiltroHistoricoMedico(null, null, null, null, idConsulta2);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(1, resultado.size());
+            var historico = resultado.iterator().next();
+            assertEquals(response2.id(), historico.id());
+            assertEquals(DIAGNOSTICO_ATUAL, historico.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, historico.prescricao());
+            assertEquals(EXAMES_ATUAL, historico.exames());
+            assertEquals(idConsulta2, historico.consulta().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorDiagnosticoAndConsultaID_entaoRetornarSetComUmHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            var response2 = controller.criarHistoricoMedico(request2);
+
+            var parametroPesquisa = "Atual";
+            var filtro = new FiltroHistoricoMedico(null, parametroPesquisa, null, null, idConsulta2);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(1, resultado.size());
+            var historico = resultado.iterator().next();
+            assertEquals(response2.id(), historico.id());
+            assertEquals(DIAGNOSTICO_ATUAL, historico.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, historico.prescricao());
+            assertEquals(EXAMES_ATUAL, historico.exames());
+            assertEquals(idConsulta2, historico.consulta().id());
+        }
+
+        @Test
+        void dadoFiltroValidoMasComValorInexistente_quandoPesquisarPorDiagnosticoAndConsultaID_entaoRetornarSetSemHistoricoMedico() {
+            var idConsulta1 = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
+            controller.criarHistoricoMedico(request1);
+
+            var idConsulta2 = consultaDao2.getId();
+            var request2 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta2);
+            controller.criarHistoricoMedico(request2);
+
+            var parametroPesquisa = "Abracadabra";
+            var filtro = new FiltroHistoricoMedico(null, parametroPesquisa, null, null, idConsulta2);
+            var resultado = controller.pesquisarHistoricoMedico(filtro);
+
+            assertEquals(0, resultado.size());
         }
     }
 }
