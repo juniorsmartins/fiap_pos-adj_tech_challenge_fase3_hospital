@@ -29,17 +29,17 @@ public class HistoricoMedicoGateway implements HistoricoMedicoOutputPort {
     }
 
     @Override
+    public HistoricoMedicoDto consultarHistoricoMedicoPorIdConsulta(Long id) {
+        return historicoMedicoRepository.consultarHistoricoMedicoPorIdConsulta(id)
+                .map(HistoricoMedicoPresenter::converterDaoParaDto)
+                .orElseThrow();
+    }
+
+    @Override
     public Set<HistoricoMedicoDto> listarHistoricoMedicoPorIdPaciente(Long id) {
         return historicoMedicoRepository.listarHistoricoMedicoPorIdPaciente(id)
                 .stream()
                 .map(HistoricoMedicoPresenter::converterDaoParaDto)
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public HistoricoMedicoDto consultarHistoricoMedicoPorIdConsulta(Long id) {
-        return historicoMedicoRepository.consultarHistoricoMedicoPorIdConsulta(id)
-                .map(HistoricoMedicoPresenter::converterDaoParaDto)
-                .orElseThrow();
     }
 }

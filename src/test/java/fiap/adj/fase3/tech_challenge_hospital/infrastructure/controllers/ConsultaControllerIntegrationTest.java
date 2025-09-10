@@ -82,7 +82,7 @@ class ConsultaControllerIntegrationTest {
         @Test
         void dadaRequisicaoValida_quandoAgendar_entaoRetornarResponseComDadosValidos() {
             var request = UtilConsultaTest.montarConsultaRequestDto(DATA_HORA_INICIAL, medicoDao1.getId(), pacienteDao1.getId());
-            var response = controller.agendarConsulta(request);
+            var response = controller.criarConsulta(request);
             assertNotNull(response.id());
             assertEquals(request.getDataHora(), response.dataHora().toString());
             assertEquals(response.status(), ConsultaStatusEnum.AGENDADO.getValue());
@@ -93,7 +93,7 @@ class ConsultaControllerIntegrationTest {
         @Test
         void dadaRequisicaoValida_quandoAgendar_entaoSalvarDadosValidosNoBanco() {
             var request = UtilConsultaTest.montarConsultaRequestDto(DATA_HORA_INICIAL, medicoDao1.getId(), pacienteDao1.getId());
-            var response = controller.agendarConsulta(request);
+            var response = controller.criarConsulta(request);
             var dadoSalvo = repository.findById(response.id()).orElseThrow();
             assertEquals(request.getDataHora(), dadoSalvo.getDataHora().toString());
             assertEquals(ConsultaStatusEnum.AGENDADO.getValue(), dadoSalvo.getStatus());

@@ -35,18 +35,18 @@ public class HistoricoMedicoController {
     }
 
     @QueryMapping
-    public Set<HistoricoMedicoResponseDto> listarHistoricoMedicoPorIdPaciente(@Argument Long id) {
-        return historicoMedicoOutputPort.listarHistoricoMedicoPorIdPaciente(id)
-                .stream()
-                .map(HistoricoMedicoPresenter::converterDtoParaResponse)
-                .collect(Collectors.toSet());
-    }
-
-    @QueryMapping
     public HistoricoMedicoResponseDto consultarHistoricoMedicoPorIdConsulta(@Argument Long id) {
         return Optional.ofNullable(id)
                 .map(historicoMedicoOutputPort::consultarHistoricoMedicoPorIdConsulta)
                 .map(HistoricoMedicoPresenter::converterDtoParaResponse)
                 .orElseThrow();
+    }
+
+    @QueryMapping
+    public Set<HistoricoMedicoResponseDto> listarHistoricoMedicoPorIdPaciente(@Argument Long id) {
+        return historicoMedicoOutputPort.listarHistoricoMedicoPorIdPaciente(id)
+                .stream()
+                .map(HistoricoMedicoPresenter::converterDtoParaResponse)
+                .collect(Collectors.toSet());
     }
 }

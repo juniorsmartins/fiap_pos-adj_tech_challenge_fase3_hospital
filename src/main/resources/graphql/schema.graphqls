@@ -108,10 +108,10 @@ type Mutation {
     apagarEnfermeiro(id: ID!): Boolean
     atualizarEnfermeiro(id: ID!, request: EnfermeiroRequestDto!): EnfermeiroResponseDto
 
-    agendarConsulta(request: ConsultaRequestDto!): ConsultaResponseDto
+    criarConsulta(request: ConsultaRequestDto!): ConsultaResponseDto
+    cancelarConsulta(id: ID!): Boolean
     atualizarConsulta(id: ID!, request: ConsultaRequestDto!): ConsultaResponseDto
     concluirConsulta(id: ID!): Boolean
-    cancelarConsulta(id: ID!): Boolean
 
     criarHistoricoMedico(request: HistoricoMedicoRequestDto!): HistoricoMedicoResponseDto
 }

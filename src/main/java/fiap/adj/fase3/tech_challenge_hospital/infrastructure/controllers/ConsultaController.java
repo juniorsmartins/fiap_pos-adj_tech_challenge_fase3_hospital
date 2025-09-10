@@ -32,7 +32,7 @@ public class ConsultaController {
     private final PacienteOutputPort pacienteOutputPort;
 
     @MutationMapping
-    public ConsultaResponseDto agendarConsulta(@Argument ConsultaRequestDto request) {
+    public ConsultaResponseDto criarConsulta(@Argument ConsultaRequestDto request) {
         return Optional.ofNullable(request)
                 .map(dto -> consultaInputPort.agendar(dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
                 .map(ConsultaPresenter::converterDtoParaResponse)
