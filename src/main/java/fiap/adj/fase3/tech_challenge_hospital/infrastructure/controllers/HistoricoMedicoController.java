@@ -34,10 +34,17 @@ public class HistoricoMedicoController {
                 .orElseThrow();
     }
 
+    @MutationMapping
+    public HistoricoMedicoResponseDto atualizarHistoricoMedico(@Argument HistoricoMedicoRequestDto request) {
+        return Optional.ofNullable(request)
+                .map(dto -> historicoMedicoInputPort.atualizar(dto, consultaOutputPort, historicoMedicoOutputPort))
+                .map(HistoricoMedicoPresenter::converterDtoParaResponse)
+                .orElseThrow();
+    }
+
     @QueryMapping
     public HistoricoMedicoResponseDto consultarHistoricoMedicoPorIdConsulta(@Argument Long id) {
-        return Optional.ofNullable(id)
-                .map(historicoMedicoOutputPort::consultarHistoricoMedicoPorIdConsulta)
+        return historicoMedicoOutputPort.consultarHistoricoMedicoPorIdConsulta(id)
                 .map(HistoricoMedicoPresenter::converterDtoParaResponse)
                 .orElseThrow();
     }

@@ -23,4 +23,17 @@ public class HistoricoMedicoUseCase implements HistoricoMedicoInputPort {
                 .map(historicoMedicoOutputPort::salvar)
                 .orElseThrow();
     }
+
+    @Override
+    public HistoricoMedicoDto atualizar(HistoricoMedicoRequestDto request, ConsultaOutputPort consultaOutputPort, HistoricoMedicoOutputPort historicoMedicoOutputPort) {
+        return historicoMedicoOutputPort.consultarHistoricoMedicoPorIdConsulta(request.getConsultaId())
+                .map(dtoDoBanco -> {
+                    var entity = HistoricoMedico.converterRequestParaEntity(request, consultaOutputPort);
+                    entity.setId(dtoDoBanco.getId());
+                    return entity;
+                })
+                .map(HistoricoMedico::converterEntityParaDto)
+                .map(historicoMedicoOutputPort::salvar)
+                .orElseThrow();
+    }
 }

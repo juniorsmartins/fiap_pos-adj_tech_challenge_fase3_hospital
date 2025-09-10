@@ -34,7 +34,7 @@ public class ConsultaController {
     @MutationMapping
     public ConsultaResponseDto criarConsulta(@Argument ConsultaRequestDto request) {
         return Optional.ofNullable(request)
-                .map(dto -> consultaInputPort.agendar(dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
+                .map(dto -> consultaInputPort.criar(dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
                 .map(ConsultaPresenter::converterDtoParaResponse)
                 .orElseThrow();
     }
@@ -42,7 +42,7 @@ public class ConsultaController {
     @MutationMapping
     public ConsultaResponseDto atualizarConsulta(@Argument Long id, @Argument ConsultaRequestDto request) {
         return Optional.ofNullable(request)
-                .map(dto -> consultaInputPort.modificar(id, dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
+                .map(dto -> consultaInputPort.atualizar(id, dto, medicoOutputPort, pacienteOutputPort, consultaOutputPort))
                 .map(ConsultaPresenter::converterDtoParaResponse)
                 .orElseThrow();
     }

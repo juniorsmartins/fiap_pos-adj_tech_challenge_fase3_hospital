@@ -8,4 +8,6 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.Histor
 public interface HistoricoMedicoInputPort {
 
     HistoricoMedicoDto criar(HistoricoMedicoRequestDto request, ConsultaOutputPort consultaOutputPort, HistoricoMedicoOutputPort historicoMedicoOutputPort);
+
+    HistoricoMedicoDto atualizar(HistoricoMedicoRequestDto request, ConsultaOutputPort consultaOutputPort, HistoricoMedicoOutputPort historicoMedicoOutputPort);
 }

@@ -29,10 +29,9 @@ public class HistoricoMedicoGateway implements HistoricoMedicoOutputPort {
     }
 
     @Override
-    public HistoricoMedicoDto consultarHistoricoMedicoPorIdConsulta(Long id) {
+    public Optional<HistoricoMedicoDto> consultarHistoricoMedicoPorIdConsulta(Long id) {
         return historicoMedicoRepository.consultarHistoricoMedicoPorIdConsulta(id)
-                .map(HistoricoMedicoPresenter::converterDaoParaDto)
-                .orElseThrow();
+                .map(HistoricoMedicoPresenter::converterDaoParaDto);
     }
 
     @Override

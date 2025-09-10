@@ -18,7 +18,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
 
     @Transactional
     @Override
-    public ConsultaDto agendar(ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort) {
+    public ConsultaDto criar(ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort) {
         return Optional.ofNullable(request)
                 .map(dto -> Consulta.converterRequestParaEntity(dto, ConsultaStatusEnum.AGENDADO, medicoOutputPort, pacienteOutputPort))
                 .map(Consulta::converterEntityParaDto)
@@ -27,7 +27,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
     }
 
     @Override
-    public ConsultaDto modificar(Long id, ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort) {
+    public ConsultaDto atualizar(Long id, ConsultaRequestDto request, MedicoOutputPort medicoOutputPort, PacienteOutputPort pacienteOutputPort, ConsultaOutputPort consultaOutputPort) {
         return consultaOutputPort.consultarPorIdAndStatus(id, ConsultaStatusEnum.AGENDADO.getValue())
                 .map(dtoDoBanco -> {
                     var entity = Consulta.converterRequestParaEntity(request, ConsultaStatusEnum.AGENDADO, medicoOutputPort, pacienteOutputPort);

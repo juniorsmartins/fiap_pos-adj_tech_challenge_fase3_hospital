@@ -114,6 +114,6 @@ type Mutation {
     concluirConsulta(id: ID!): Boolean
 
     criarHistoricoMedico(request: HistoricoMedicoRequestDto!): HistoricoMedicoResponseDto
-    atualizarHistoricoMedico(id: ID!, request: HistoricoMedicoRequestDto!): HistoricoMedicoResponseDto
+    atualizarHistoricoMedico(request: HistoricoMedicoRequestDto!): HistoricoMedicoResponseDto
 }
 

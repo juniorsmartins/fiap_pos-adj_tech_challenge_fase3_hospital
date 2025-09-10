@@ -30,11 +30,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 class HistoricoMedicoControllerIntegrationTest {
 
-    private static final String DIAGNOSTICO = "Diagnostico 1";
+    private static final String DIAGNOSTICO = "Diagnostico Inicial";
 
-    private static final String PRESCRICAO = "Prescrição 1";
+    private static final String DIAGNOSTICO_ATUAL = "Diagnostico Atual";
 
-    private static final String EXAMES = "Exames 1";
+    private static final String PRESCRICAO = "Prescrição Inicial";
+
+    private static final String PRESCRICAO_ATUAL = "Prescrição Atual";
+
+    private static final String EXAMES = "Exames Inicial";
+
+    private static final String EXAMES_ATUAL = "Exames Atual";
 
     @Autowired
     private HistoricoMedicoController controller;
@@ -99,6 +105,34 @@ class HistoricoMedicoControllerIntegrationTest {
             assertEquals(doBanco.getPrescricao(), response.prescricao());
             assertEquals(doBanco.getExames(), response.exames());
             assertEquals(doBanco.getConsulta().getId(), response.consulta().id());
+        }
+    }
+
+    @Nested
+    @DisplayName("Atualizar")
+    class Atualizar {
+
+        @Test
+        void dadoIdValidoAndRequisicaoValida_quandoAtualizar_entaoRetornarResponseValido() {
+            var idConsulta = consultaDao1.getId();
+            var request = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta);
+            var desatualizado = controller.criarHistoricoMedico(request);
+            assertEquals(DIAGNOSTICO, desatualizado.diagnostico());
+            assertEquals(PRESCRICAO, desatualizado.prescricao());
+            assertEquals(EXAMES, desatualizado.exames());
+            assertEquals(idConsulta, desatualizado.consulta().id());
+
+            var requestAtual = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta);
+            var atualizado = controller.atualizarHistoricoMedico(requestAtual);
+            assertEquals(DIAGNOSTICO_ATUAL, atualizado.diagnostico());
+            assertEquals(PRESCRICAO_ATUAL, atualizado.prescricao());
+            assertEquals(EXAMES_ATUAL, atualizado.exames());
+            assertEquals(idConsulta, atualizado.consulta().id());
+        }
+
+        @Test
+        void dadoIdValidoAndRequisicaoValida_quandoAtualizar_entaoSalvarNoBanco() {
+
         }
     }
 
