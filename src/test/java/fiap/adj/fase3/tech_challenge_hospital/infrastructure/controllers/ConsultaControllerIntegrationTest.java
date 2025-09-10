@@ -76,11 +76,11 @@ class ConsultaControllerIntegrationTest {
     }
 
     @Nested
-    @DisplayName("Agendar")
-    class Agendar {
+    @DisplayName("Criar")
+    class Criar {
 
         @Test
-        void dadaRequisicaoValida_quandoAgendar_entaoRetornarResponseComDadosValidos() {
+        void dadaRequisicaoValida_quandoCriar_entaoRetornarResponseComDadosValidos() {
             var request = UtilConsultaTest.montarConsultaRequestDto(DATA_HORA_INICIAL, medicoDao1.getId(), pacienteDao1.getId());
             var response = controller.criarConsulta(request);
             assertNotNull(response.id());
@@ -91,7 +91,7 @@ class ConsultaControllerIntegrationTest {
         }
 
         @Test
-        void dadaRequisicaoValida_quandoAgendar_entaoSalvarDadosValidosNoBanco() {
+        void dadaRequisicaoValida_quandoCriar_entaoSalvarDadosValidosNoBanco() {
             var request = UtilConsultaTest.montarConsultaRequestDto(DATA_HORA_INICIAL, medicoDao1.getId(), pacienteDao1.getId());
             var response = controller.criarConsulta(request);
             var dadoSalvo = repository.findById(response.id()).orElseThrow();
