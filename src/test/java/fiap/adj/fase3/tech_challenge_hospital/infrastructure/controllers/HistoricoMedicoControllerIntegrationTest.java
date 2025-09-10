@@ -61,13 +61,11 @@ class HistoricoMedicoControllerIntegrationTest {
 
     private ConsultaDao consultaDao2;
 
-    private MedicoDao medicoDao1;
-
     private PacienteDao pacienteDao1;
 
     @BeforeEach
     void setUp() {
-        medicoDao1 = UtilMedicoTest.montarMedicoDao("MedicoConsulta 1", "username111", "password111");
+        MedicoDao medicoDao1 = UtilMedicoTest.montarMedicoDao("MedicoConsulta 1", "username111", "password111");
         medicoRepository.save(medicoDao1);
 
         pacienteDao1 = UtilPacienteTest.montarPacienteDao("PacienteConsulta 1", "username333", "password333");
