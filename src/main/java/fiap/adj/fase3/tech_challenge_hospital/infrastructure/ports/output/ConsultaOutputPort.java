@@ -14,4 +14,6 @@ public interface ConsultaOutputPort {
     Set<ConsultaDto> buscarHistoricoDeConsultasPorId(Long id);
 
     Optional<ConsultaDto> consultarPorIdComStatusNot(Long id, String status);
+
+    Set<ConsultaDto> pesquisar(Long id, String dataHora, String status, Long medicoId, Long pacienteId);
 }

@@ -24,6 +24,14 @@ input ConsultaRequestDto {
     pacienteId: ID!
 }
 
+input FiltroConsulta {
+    id: ID
+    dataHora: String
+    status: String
+    medicoId: ID
+    pacienteId: ID
+}
+
 input HistoricoMedicoRequestDto {
     diagnostico: String!
     prescricao: String!
@@ -97,6 +105,7 @@ type Query {
 
     consultarConsultaPorId(id: ID!): ConsultaResponseDto!
     listarHistoricoDeConsultasPorIdPaciente(id: ID!): [ConsultaResponseDto!]!
+    pesquisarConsulta(filtro: FiltroConsulta): [ConsultaResponseDto!]!
 
     consultarHistoricoMedicoPorIdConsulta(id: ID!): HistoricoMedicoResponseDto!
     listarHistoricoMedicoPorIdPaciente(id: ID!): [HistoricoMedicoResponseDto!]!

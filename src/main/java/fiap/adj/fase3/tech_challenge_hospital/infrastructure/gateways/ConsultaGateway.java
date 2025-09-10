@@ -50,4 +50,12 @@ public class ConsultaGateway implements ConsultaOutputPort {
         return consultaRepository.findByIdAndStatusNot(id, status)
                 .map(ConsultaPresenter::converterDaoParaDto);
     }
+
+    @Override
+    public Set<ConsultaDto> pesquisar(Long id, String dataHora, String status, Long medicoId, Long pacienteId) {
+        return consultaRepository.pesquisar(id, dataHora, status, medicoId, pacienteId)
+                .stream()
+                .map(ConsultaPresenter::converterDaoParaDto)
+                .collect(Collectors.toSet());
+    }
 }

@@ -3,6 +3,7 @@ package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 import fiap.adj.fase3.tech_challenge_hospital.UtilConsultaTest;
 import fiap.adj.fase3.tech_challenge_hospital.UtilMedicoTest;
 import fiap.adj.fase3.tech_challenge_hospital.UtilPacienteTest;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroConsulta;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.ConsultaDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
@@ -42,7 +43,9 @@ class ConsultaControllerIntegrationTest {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    private ConsultaDao dao;
+    private ConsultaDao consultaDao1;
+
+    private ConsultaDao consultaDao2;
 
     private MedicoDao medicoDao1;
 
@@ -67,12 +70,12 @@ class ConsultaControllerIntegrationTest {
         pacienteRepository.save(pacienteDao2);
 
         var dataHora1 = LocalDateTime.of(LocalDate.of(2025, 8, 10), LocalTime.of(14, 10));
-        dao = UtilConsultaTest.montarConsultaDao(dataHora1, ConsultaStatusEnum.AGENDADO.getValue(), medicoDao1, pacienteDao1);
-        repository.save(dao);
+        consultaDao1 = UtilConsultaTest.montarConsultaDao(dataHora1, ConsultaStatusEnum.AGENDADO.getValue(), medicoDao1, pacienteDao1);
+        repository.save(consultaDao1);
 
         var dataHora2 = LocalDateTime.of(LocalDate.of(2025, 9, 5), LocalTime.of(16, 12));
-        var dao2 = UtilConsultaTest.montarConsultaDao(dataHora2, ConsultaStatusEnum.AGENDADO.getValue(), medicoDao2, pacienteDao1);
-        repository.save(dao2);
+        consultaDao2 = UtilConsultaTest.montarConsultaDao(dataHora2, ConsultaStatusEnum.AGENDADO.getValue(), medicoDao2, pacienteDao1);
+        repository.save(consultaDao2);
     }
 
     @Nested
@@ -108,7 +111,7 @@ class ConsultaControllerIntegrationTest {
 
         @Test
         void dadaRequisicaoValida_quandoAtualizar_entaoRetornarResponseValido() {
-            var id = dao.getId();
+            var id = consultaDao1.getId();
             var desatualizado = repository.findById(id).orElseThrow();
             assertNotEquals(DATA_HORA_INICIAL, desatualizado.getDataHora().toString());
             assertEquals(medicoDao1.getId(), desatualizado.getMedico().getId());
@@ -125,7 +128,7 @@ class ConsultaControllerIntegrationTest {
 
         @Test
         void dadaRequisicaoValida_quandoAtualizar_entaoAtualizarNoBanco() {
-            var id = dao.getId();
+            var id = consultaDao1.getId();
             var atualizado = UtilConsultaTest
                     .montarConsultaRequestDto(DATA_HORA_INICIAL, medicoDao2.getId(), pacienteDao2.getId());
             var response = controller.atualizarConsulta(id, atualizado);
@@ -145,11 +148,11 @@ class ConsultaControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoConsultarPorId_entaoRetornarResponseValido() {
-            var response = controller.consultarConsultaPorId(dao.getId());
-            assertEquals(dao.getId(), response.id());
-            assertEquals(dao.getDataHora(), response.dataHora());
-            assertEquals(dao.getMedico().getId(), response.medico().id());
-            assertEquals(dao.getPaciente().getId(), response.paciente().id());
+            var response = controller.consultarConsultaPorId(consultaDao1.getId());
+            assertEquals(consultaDao1.getId(), response.id());
+            assertEquals(consultaDao1.getDataHora(), response.dataHora());
+            assertEquals(consultaDao1.getMedico().getId(), response.medico().id());
+            assertEquals(consultaDao1.getPaciente().getId(), response.paciente().id());
         }
     }
 
@@ -159,19 +162,19 @@ class ConsultaControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoConcluirConsulta_entaoRetornarTrue() {
-            var response = controller.concluirConsulta(dao.getId());
+            var response = controller.concluirConsulta(consultaDao1.getId());
             assertTrue(response);
         }
 
         @Test
         void dadoIdValido_quandoConcluirConsulta_entaoSalvarConsultaComStatusConcluido() {
-            var dadoAnterior = repository.findById(dao.getId()).orElseThrow();
+            var dadoAnterior = repository.findById(consultaDao1.getId()).orElseThrow();
             assertEquals(ConsultaStatusEnum.AGENDADO.getValue(), dadoAnterior.getStatus());
 
-            var response = controller.concluirConsulta(dao.getId());
+            var response = controller.concluirConsulta(consultaDao1.getId());
             assertTrue(response);
 
-            var dadoPosterior = repository.findById(dao.getId()).orElseThrow();
+            var dadoPosterior = repository.findById(consultaDao1.getId()).orElseThrow();
             assertEquals(ConsultaStatusEnum.CONCLUIDO.getValue(), dadoPosterior.getStatus());
         }
     }
@@ -182,19 +185,19 @@ class ConsultaControllerIntegrationTest {
 
         @Test
         void dadoIdValido_quandoCancelarConsulta_entaoRetornarTrue() {
-            var response = controller.cancelarConsulta(dao.getId());
+            var response = controller.cancelarConsulta(consultaDao1.getId());
             assertTrue(response);
         }
 
         @Test
         void dadoIdValido_quandoCancelarConsulta_entaoSalvarConsultaComStatusCancelado() {
-            var dadoAnterior = repository.findById(dao.getId()).orElseThrow();
+            var dadoAnterior = repository.findById(consultaDao1.getId()).orElseThrow();
             assertEquals(ConsultaStatusEnum.AGENDADO.getValue(), dadoAnterior.getStatus());
 
-            var response = controller.cancelarConsulta(dao.getId());
+            var response = controller.cancelarConsulta(consultaDao1.getId());
             assertTrue(response);
 
-            var dadoPosterior = repository.findById(dao.getId()).orElseThrow();
+            var dadoPosterior = repository.findById(consultaDao1.getId()).orElseThrow();
             assertEquals(ConsultaStatusEnum.CANCELADO.getValue(), dadoPosterior.getStatus());
         }
     }
@@ -207,6 +210,87 @@ class ConsultaControllerIntegrationTest {
         void dadoIdValido_quandoListarHistoricoDeConsultasPorIdPaciente_entaoRetornarListaValida() {
             var colecao = controller.listarHistoricoDeConsultasPorIdPaciente(pacienteDao1.getId());
             assertEquals(2, colecao.size());
+        }
+    }
+
+    @Nested
+    @DisplayName("Pesquisar")
+    class Pesquisar {
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorId_entaoRetornarSetComUmConsultaResponseDto() {
+            var idConsulta = consultaDao1.getId();
+            var filtro = new FiltroConsulta(idConsulta, null, null, null, null);
+            var response = controller.pesquisarConsulta(filtro);
+
+            assertEquals(1, response.size());
+            var consulta = response.iterator().next();
+            assertEquals(idConsulta, consulta.id());
+            assertEquals(consultaDao1.getDataHora(), consulta.dataHora());
+            assertEquals(ConsultaStatusEnum.AGENDADO.getValue(), consulta.status());
+            assertEquals(consultaDao1.getMedico().getId(), consulta.medico().id());
+            assertEquals(consultaDao1.getPaciente().getId(), consulta.paciente().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorDataHora_entaoRetornarSetComUmConsultaResponseDto() {
+            var dataHora1 = LocalDateTime
+                    .of(LocalDate.of(2025, 8, 10), LocalTime.of(14, 10)).toString();
+            var filtro = new FiltroConsulta(null, dataHora1, null, null, null);
+            var response = controller.pesquisarConsulta(filtro);
+
+            assertEquals(1, response.size());
+            var consulta = response.iterator().next();
+            assertEquals(consultaDao1.getId(), consulta.id());
+            assertEquals(dataHora1, consulta.dataHora().toString());
+            assertEquals(ConsultaStatusEnum.AGENDADO.getValue(), consulta.status());
+            assertEquals(consultaDao1.getMedico().getId(), consulta.medico().id());
+            assertEquals(consultaDao1.getPaciente().getId(), consulta.paciente().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorStatusAgendado_entaoRetornarSetComDoisConsultaResponseDto() {
+            var status = ConsultaStatusEnum.AGENDADO.getValue();
+            var filtro = new FiltroConsulta(null, null, status, null, null);
+            var response = controller.pesquisarConsulta(filtro);
+
+            assertEquals(2, response.size());
+            var consulta = response.iterator().next();
+            assertEquals(consultaDao2.getId(), consulta.id());
+            assertEquals(consultaDao2.getDataHora(), consulta.dataHora());
+            assertEquals(consultaDao2.getStatus(), consulta.status());
+            assertEquals(consultaDao2.getMedico().getId(), consulta.medico().id());
+            assertEquals(consultaDao2.getPaciente().getId(), consulta.paciente().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorMedicoId_entaoRetornarSetComUmConsultaResponseDto() {
+            var idMedico2 = consultaDao2.getMedico().getId();
+            var filtro = new FiltroConsulta(null, null, null, idMedico2, null);
+            var response = controller.pesquisarConsulta(filtro);
+
+            assertEquals(1, response.size());
+            var consulta = response.iterator().next();
+            assertEquals(consultaDao2.getId(), consulta.id());
+            assertEquals(consultaDao2.getDataHora(), consulta.dataHora());
+            assertEquals(consultaDao2.getStatus(), consulta.status());
+            assertEquals(consultaDao2.getMedico().getId(), consulta.medico().id());
+            assertEquals(consultaDao2.getPaciente().getId(), consulta.paciente().id());
+        }
+
+        @Test
+        void dadoFiltroValido_quandoPesquisarPorPacienteId_entaoRetornarSetComDoisConsultaResponseDto() {
+            var idPaciente1 = consultaDao2.getPaciente().getId();
+            var filtro = new FiltroConsulta(null, null, null, null, idPaciente1);
+            var response = controller.pesquisarConsulta(filtro);
+
+            assertEquals(2, response.size());
+            var consulta = response.iterator().next();
+            assertEquals(consultaDao1.getId(), consulta.id());
+            assertEquals(consultaDao1.getDataHora(), consulta.dataHora());
+            assertEquals(consultaDao1.getStatus(), consulta.status());
+            assertEquals(consultaDao1.getMedico().getId(), consulta.medico().id());
+            assertEquals(consultaDao1.getPaciente().getId(), consulta.paciente().id());
         }
     }
 }

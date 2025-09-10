@@ -1,6 +1,7 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.ConsultaRequestDto;
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroConsulta;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.response.ConsultaResponseDto;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.input.ConsultaInputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.ConsultaOutputPort;
@@ -74,5 +75,13 @@ public class ConsultaController {
                 .map(ConsultaPresenter::converterDtoParaResponse)
                 .sorted(Comparator.comparing(ConsultaResponseDto::dataHora, Comparator.reverseOrder()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @QueryMapping
+    public Set<ConsultaResponseDto> pesquisarConsulta(@Argument FiltroConsulta filtro) {
+        return consultaOutputPort.pesquisar(filtro.id(), filtro.dataHora(), filtro.status(), filtro.medicoId(), filtro.pacienteId())
+                .stream()
+                .map(ConsultaPresenter::converterDtoParaResponse)
+                .collect(Collectors.toSet());
     }
 }
