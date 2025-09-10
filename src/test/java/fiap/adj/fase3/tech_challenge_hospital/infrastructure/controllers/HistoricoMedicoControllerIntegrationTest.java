@@ -322,7 +322,7 @@ class HistoricoMedicoControllerIntegrationTest {
         }
 
         @Test
-        void dadoFiltroValidoMasComValorInexistente_quandoPesquisarPorDiagnosticoAndConsultaID_entaoRetornarSetSemHistoricoMedico() {
+        void dadoFiltroValidoMasComValorInexistente_quandoPesquisarPorDiagnosticoAndConsultaID_entaoRetornarSetVazio() {
             var idConsulta1 = consultaDao1.getId();
             var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta1);
             controller.criarHistoricoMedico(request1);

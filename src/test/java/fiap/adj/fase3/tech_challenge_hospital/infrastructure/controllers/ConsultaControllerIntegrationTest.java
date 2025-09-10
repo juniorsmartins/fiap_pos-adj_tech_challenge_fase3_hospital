@@ -292,5 +292,15 @@ class ConsultaControllerIntegrationTest {
             assertEquals(consultaDao1.getMedico().getId(), consulta.medico().id());
             assertEquals(consultaDao1.getPaciente().getId(), consulta.paciente().id());
         }
+
+        @Test
+        void dadoFiltrosValidosMasComValorInexistente_quandoPesquisarPorStatusAndPacienteId_entaoRetornarSetVazio() {
+            var status = ConsultaStatusEnum.CONCLUIDO.getValue();
+            var idPaciente1 = consultaDao2.getPaciente().getId();
+            var filtro = new FiltroConsulta(null, null, status, null, idPaciente1);
+            var response = controller.pesquisarConsulta(filtro);
+
+            assertEquals(0, response.size());
+        }
     }
 }
