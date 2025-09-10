@@ -9,4 +9,6 @@ public interface HistoricoMedicoOutputPort {
     HistoricoMedicoDto salvar(HistoricoMedicoDto dto);
 
     Set<HistoricoMedicoDto> listarHistoricoMedicoPorIdPaciente(Long id);
+
+    HistoricoMedicoDto consultarHistoricoMedicoPorIdConsulta(Long id);
 }

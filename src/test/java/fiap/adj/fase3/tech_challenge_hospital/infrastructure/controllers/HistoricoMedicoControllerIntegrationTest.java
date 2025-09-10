@@ -118,4 +118,20 @@ class HistoricoMedicoControllerIntegrationTest {
             assertEquals(2, response.size());
         }
     }
+
+    @Nested
+    @DisplayName("Consultar")
+    class Consultar {
+
+        @Test
+        void dadoIdValido_quandoConsultarHistoricoMedicoPorIdConsulta() {
+            var idConsulta = consultaDao1.getId();
+            var request1 = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta);
+            controller.criarHistoricoMedico(request1);
+            var response = controller.consultarHistoricoMedicoPorIdConsulta(idConsulta);
+            assertEquals(DIAGNOSTICO, response.diagnostico());
+            assertEquals(PRESCRICAO, response.prescricao());
+            assertEquals(EXAMES, response.exames());
+        }
+    }
 }

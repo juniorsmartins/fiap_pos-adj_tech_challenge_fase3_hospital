@@ -82,10 +82,14 @@ type HistoricoMedicoResponseDto {
 
 type Query {
     consultarPacientePorId(id: ID!): PacienteResponseDto!
+
     consultarMedicoPorId(id: ID!): MedicoResponseDto!
+
     consultarEnfermeiroPorId(id: ID!): EnfermeiroResponseDto!
+
     consultarConsultaPorId(id: ID!): ConsultaResponseDto!
     listarHistoricoDeConsultasPorIdPaciente(id: ID!): [ConsultaResponseDto!]!
+
     consultarHistoricoMedicoPorIdConsulta(id: ID!): HistoricoMedicoResponseDto!
     listarHistoricoMedicoPorIdPaciente(id: ID!): [HistoricoMedicoResponseDto!]!
 }

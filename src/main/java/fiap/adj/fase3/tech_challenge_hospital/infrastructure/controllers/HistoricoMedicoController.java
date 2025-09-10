@@ -41,4 +41,12 @@ public class HistoricoMedicoController {
                 .map(HistoricoMedicoPresenter::converterDtoParaResponse)
                 .collect(Collectors.toSet());
     }
+
+    @QueryMapping
+    public HistoricoMedicoResponseDto consultarHistoricoMedicoPorIdConsulta(@Argument Long id) {
+        return Optional.ofNullable(id)
+                .map(historicoMedicoOutputPort::consultarHistoricoMedicoPorIdConsulta)
+                .map(HistoricoMedicoPresenter::converterDtoParaResponse)
+                .orElseThrow();
+    }
 }
