@@ -132,7 +132,19 @@ class HistoricoMedicoControllerIntegrationTest {
 
         @Test
         void dadoIdValidoAndRequisicaoValida_quandoAtualizar_entaoSalvarNoBanco() {
+            var idConsulta = consultaDao1.getId();
+            var request = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO, PRESCRICAO, EXAMES, idConsulta);
+            controller.criarHistoricoMedico(request);
 
+            var requestAtual = UtilHistoricoMedicoTest.montarHistoricoMedicoRequestDto(DIAGNOSTICO_ATUAL, PRESCRICAO_ATUAL, EXAMES_ATUAL, idConsulta);
+            var atualizado = controller.atualizarHistoricoMedico(requestAtual);
+
+            var doBanco = repository.consultarHistoricoMedicoPorIdConsulta(idConsulta).orElseThrow();
+
+            assertEquals(doBanco.getDiagnostico(), atualizado.diagnostico());
+            assertEquals(doBanco.getPrescricao(), atualizado.prescricao());
+            assertEquals(doBanco.getExames(), atualizado.exames());
+            assertEquals(doBanco.getConsulta().getId(), atualizado.consulta().id());
         }
     }
 
