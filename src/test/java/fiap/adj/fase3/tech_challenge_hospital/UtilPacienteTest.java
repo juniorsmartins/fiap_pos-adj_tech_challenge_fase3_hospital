@@ -6,16 +6,13 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.PacienteDao;
 
 public class UtilPacienteTest {
 
-    public static PacienteRequestDto montarPacienteRequestDto(String nome, String username, String password) {
+    public static PacienteRequestDto montarPacienteRequestDto(String nome, String email, String username, String password) {
         var userRequestDto = UtilUserTest.montarUserRequestDto(username, password);
-        return new PacienteRequestDto(nome, userRequestDto);
+        return new PacienteRequestDto(nome, email, userRequestDto);
     }
 
-    public static PacienteDao montarPacienteDao(String nome, String username, String password) {
+    public static PacienteDao montarPacienteDao(String nome, String email, String username, String password) {
         var userDao = UtilUserTest.montarUserDao(username, password, 4L, RoleEnum.ROLE_PACIENTE.getValue());
-        var pacienteDao = new PacienteDao();
-        pacienteDao.setNome(nome);
-        pacienteDao.setUser(userDao);
-        return pacienteDao;
+        return new PacienteDao(nome, email, userDao);
     }
 }

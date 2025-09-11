@@ -69,7 +69,7 @@ class HistoricoMedicoControllerIntegrationTest {
         MedicoDao medicoDao1 = UtilMedicoTest.montarMedicoDao("MedicoConsulta 1", "username111", "password111");
         medicoRepository.save(medicoDao1);
 
-        pacienteDao1 = UtilPacienteTest.montarPacienteDao("PacienteConsulta 1", "username333", "password333");
+        pacienteDao1 = UtilPacienteTest.montarPacienteDao("PacienteConsulta 1", "paciente1@email.com", "username333", "password333");
         pacienteRepository.save(pacienteDao1);
 
         var dataHora1 = LocalDateTime.of(LocalDate.of(2025, 8, 10), LocalTime.of(14, 10));

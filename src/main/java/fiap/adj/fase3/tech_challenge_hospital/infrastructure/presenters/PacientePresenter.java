@@ -8,16 +8,16 @@ public class PacientePresenter {
 
     public static PacienteResponseDto converterDtoParaResponse(PacienteDto dto) {
         var userResponse = UserPresenter.converterDtoParaResponse(dto.user());
-        return new PacienteResponseDto(dto.id(), dto.nome(), userResponse);
+        return new PacienteResponseDto(dto.id(), dto.nome(), dto.email(), userResponse);
     }
 
     public static PacienteDao converterDtoParaDao(PacienteDto dto) {
         var userDao = UserPresenter.converterDtoParaDao(dto.user());
-        return new PacienteDao(dto.id(), dto.nome(), userDao);
+        return new PacienteDao(dto.id(), dto.nome(), dto.email(), userDao);
     }
 
     public static PacienteDto converterDaoParaDto(PacienteDao dao) {
         var userDto = UserPresenter.converterDaoParaDto(dao.getUser());
-        return new PacienteDto(dao.getId(), dao.getNome(), userDto);
+        return new PacienteDto(dao.getId(), dao.getNome(), dao.getEmail(), userDto);
     }
 }
