@@ -49,7 +49,15 @@ spring:
     bootstrap-servers: localhost:9092  # Ou seu broker (ex.: Kafka em Docker)
 #    bootstrap-servers: ${KAFKA_BROKER:kafka:9092}
     topic:
-      consulta-informar-paciente: consulta-informar-paciente  # Nome do tópico para enviar ConsultaDto
+      evento-informar-paciente-consulta: evento-informar-paciente-consulta
+      evento-atualizar-status-consulta: evento-atualizar-status-consulta
+    consumer:
+      group-id: grupo-principal
+      auto-offset-reset: earliest # Ou latest, dependendo do caso de uso - earliest lê desde o início do tópico
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  # Para JSON
