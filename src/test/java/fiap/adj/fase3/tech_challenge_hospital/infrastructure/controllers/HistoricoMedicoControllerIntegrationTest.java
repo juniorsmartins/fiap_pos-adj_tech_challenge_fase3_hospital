@@ -1,9 +1,10 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
-import fiap.adj.fase3.tech_challenge_hospital.UtilConsultaTest;
-import fiap.adj.fase3.tech_challenge_hospital.UtilHistoricoMedicoTest;
-import fiap.adj.fase3.tech_challenge_hospital.UtilMedicoTest;
-import fiap.adj.fase3.tech_challenge_hospital.UtilPacienteTest;
+import fiap.adj.fase3.tech_challenge_hospital.kafka.KafkaBaseIntegrationTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilConsultaTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilHistoricoMedicoTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilMedicoTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilPacienteTest;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroHistoricoMedico;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.ConsultaDao;
@@ -29,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-class HistoricoMedicoControllerIntegrationTest {
+class HistoricoMedicoControllerIntegrationTest extends KafkaBaseIntegrationTest {
 
     private static final String DIAGNOSTICO = "Diagnostico Inicial";
 

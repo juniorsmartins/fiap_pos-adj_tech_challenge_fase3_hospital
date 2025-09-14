@@ -45,7 +45,6 @@ spring:
   messages: # Configuracao de mensagem para login personalizado
     basename: messages
 
-  #    bootstrap-servers: localhost:9092  # Ou seu broker (ex.: Kafka em Docker)
   #    bootstrap-servers: ${KAFKA_BROKER:kafka:9092}
   kafka:
     bootstrap-servers: localhost:9092
@@ -53,12 +52,12 @@ spring:
       evento-informar-paciente-consulta: evento-informar-paciente-consulta
       evento-atualizar-status-consulta: evento-atualizar-status-consulta
     consumer:
-      group-id: grupo-principal
+      group-id: grupo-mensagem-kafka
       auto-offset-reset: earliest # Ou latest, dependendo do caso de uso - earliest lê desde o início do tópico
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "*"
+        spring.json.trusted.packages: "fiap.adj.fase3" # Pacote confiável para desserialização - Asterisco para confiar em todos
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  # Para JSON

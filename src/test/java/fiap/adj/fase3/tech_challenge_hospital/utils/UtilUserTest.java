@@ -1,4 +1,4 @@
-package fiap.adj.fase3.tech_challenge_hospital;
+package fiap.adj.fase3.tech_challenge_hospital.utils;
 
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.UserRequestDto;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.UserDao;

@@ -1,8 +1,5 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
-import fiap.adj.fase3.tech_challenge_hospital.UtilConsultaTest;
-import fiap.adj.fase3.tech_challenge_hospital.UtilMedicoTest;
-import fiap.adj.fase3.tech_challenge_hospital.UtilPacienteTest;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroConsulta;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.ConsultaDao;
@@ -11,6 +8,10 @@ import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.PacienteDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.ConsultaRepository;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.MedicoRepository;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.PacienteRepository;
+import fiap.adj.fase3.tech_challenge_hospital.kafka.KafkaBaseIntegrationTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilConsultaTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilMedicoTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilPacienteTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ConsultaControllerIntegrationTest {
+class ConsultaControllerIntegrationTest extends KafkaBaseIntegrationTest {
 
     public static final String DATA_HORA_INICIAL = "2025-07-12T10:10:22";
 
