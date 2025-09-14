@@ -14,7 +14,7 @@ public class KafkaTopicsConfig {
 
     @Bean
     public NewTopic criarTopicoEventoInformarPacienteConsulta() {
-        return montarTopico(kafkaPropertiesConfig.topicoEventoInformarPacienteConsulta, 2, (short) 1);
+        return montarTopico(kafkaPropertiesConfig.topicoEventoInformarPacienteConsulta, 1, (short) 1);
     }
 
     @Bean

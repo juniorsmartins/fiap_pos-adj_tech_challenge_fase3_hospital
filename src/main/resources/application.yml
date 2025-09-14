@@ -45,9 +45,10 @@ spring:
   messages: # Configuracao de mensagem para login personalizado
     basename: messages
 
+  #    bootstrap-servers: localhost:9092  # Ou seu broker (ex.: Kafka em Docker)
+  #    bootstrap-servers: ${KAFKA_BROKER:kafka:9092}
   kafka:
-    bootstrap-servers: localhost:9092  # Ou seu broker (ex.: Kafka em Docker)
-#    bootstrap-servers: ${KAFKA_BROKER:kafka:9092}
+    bootstrap-servers: localhost:9092
     topic:
       evento-informar-paciente-consulta: evento-informar-paciente-consulta
       evento-atualizar-status-consulta: evento-atualizar-status-consulta

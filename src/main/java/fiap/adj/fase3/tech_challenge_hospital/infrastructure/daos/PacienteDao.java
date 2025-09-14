@@ -1,15 +1,13 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "pacientes")
 @AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
+@Data
 public final class PacienteDao {
 
     @Id
