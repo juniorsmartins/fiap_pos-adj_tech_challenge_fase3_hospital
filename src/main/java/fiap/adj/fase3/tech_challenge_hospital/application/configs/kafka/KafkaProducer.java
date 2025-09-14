@@ -4,11 +4,13 @@ import fiap.adj.fase3.tech_challenge_hospital.application.dtos.external.Mensagem
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.ConsultaDto;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public final class KafkaProducer {
@@ -20,6 +22,7 @@ public final class KafkaProducer {
     public ConsultaDto enviarEventoConsulta(ConsultaDto consultaDto, ConsultaStatusEnum motivo) {
         var mensagem = embalarEventoConsulta(consultaDto, motivo);
         kafkaTemplate.send(kafkaPropertiesConfig.topicoEventoInformarPacienteConsulta, UUID.randomUUID().toString(), mensagem);
+        log.info("\n\n Mensagem enviada ao tópico de eventos de consulta: {}. \n\n", mensagem);
         return consultaDto;
     }
 

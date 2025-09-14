@@ -5,6 +5,7 @@ input UserRequestDto {
 
 input PacienteRequestDto {
     nome: String!
+    email: String!
     user: UserRequestDto!
 }
 
@@ -64,6 +65,7 @@ type UserResponseDto {
 type PacienteResponseDto {
     id: ID
     nome: String
+    email: String
     user: UserResponseDto
 }
 
