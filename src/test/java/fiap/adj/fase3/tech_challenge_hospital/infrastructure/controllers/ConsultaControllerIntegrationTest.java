@@ -1,7 +1,9 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
+import fiap.adj.fase3.tech_challenge_hospital.application.dtos.external.MensagemKafka;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.FiltroConsulta;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
+import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.MotivoKafkaEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.ConsultaDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.PacienteDao;
@@ -12,17 +14,26 @@ import fiap.adj.fase3.tech_challenge_hospital.kafka.KafkaBaseIntegrationTest;
 import fiap.adj.fase3.tech_challenge_hospital.utils.UtilConsultaTest;
 import fiap.adj.fase3.tech_challenge_hospital.utils.UtilMedicoTest;
 import fiap.adj.fase3.tech_challenge_hospital.utils.UtilPacienteTest;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,6 +54,9 @@ class ConsultaControllerIntegrationTest extends KafkaBaseIntegrationTest {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafka; // Necessário para inicializar o contexto Kafka
 
     private ConsultaDao consultaDao1;
 
@@ -103,6 +117,44 @@ class ConsultaControllerIntegrationTest extends KafkaBaseIntegrationTest {
             assertEquals(ConsultaStatusEnum.AGENDADO.getValue(), dadoSalvo.getStatus());
             assertEquals(request.getMedicoId(), dadoSalvo.getMedico().getId());
             assertEquals(request.getPacienteId(), dadoSalvo.getPaciente().getId());
+        }
+
+        @Test
+        void dadaRequisicaoValida_quandoCriar_entaoEnviarMensagemKafkaCorreta() throws InterruptedException {
+            // Configura propriedades do consumidor Kafka
+            Map<String, Object> consumerProps = KafkaTestUtils.consumerProps(
+                    "test-group-" + UUID.randomUUID(), // group.id único
+                    "true",                            // autoCommit
+                    embeddedKafka
+            );
+
+            // Cria o consumer
+            KafkaConsumer<String, MensagemKafka> consumer = new KafkaConsumer<>(consumerProps,
+                    new StringDeserializer(),
+                    new JsonDeserializer<>(MensagemKafka.class, false));
+
+            // Subscreve ao tópico
+            consumer.subscribe(List.of("evento-informar-paciente-consulta"));
+
+            // Arrange
+            var request = UtilConsultaTest
+                    .montarConsultaRequestDto(DATA_HORA_INICIAL, medicoDao1.getId(), pacienteDao1.getId());
+
+            // Act
+            controller.criarConsulta(request);
+
+            // Assert → captura a mensagem do tópico
+            ConsumerRecord<String, MensagemKafka> record = KafkaTestUtils
+                    .getSingleRecord(consumer, "evento-informar-paciente-consulta");
+
+            assertNotNull(record);
+            MensagemKafka mensagem = record.value();
+            assertEquals(request.getDataHora(), mensagem.dataHora().toString());
+            assertEquals(medicoDao1.getNome(), mensagem.nomeMedico());
+            assertEquals(pacienteDao1.getNome(), mensagem.nomePaciente());
+            assertEquals(MotivoKafkaEnum.AGENDAMENTO.getValue(), mensagem.motivo());
+
+            consumer.close();
         }
     }
 
