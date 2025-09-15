@@ -43,6 +43,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 })
                 .map(Consulta::converterEntityParaDto)
                 .map(consultaOutputPort::salvar)
+                .map(dto -> kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.ALTERACAO))
                 .orElseThrow();
     }
 
@@ -60,6 +61,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 .ifPresentOrElse(dto -> {
                     dto.setStatus(ConsultaStatusEnum.CONCLUIDO.getValue());
                     consultaOutputPort.salvar(dto);
+                    kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.ALTERACAO);
                 }, () -> {
                     throw new RuntimeException();
                 });
@@ -72,6 +74,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 .ifPresentOrElse(dto -> {
                     dto.setStatus(ConsultaStatusEnum.CANCELADO.getValue());
                     consultaOutputPort.salvar(dto);
+                    kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.ALTERACAO);
                 }, () -> {
                     throw new RuntimeException();
                 });

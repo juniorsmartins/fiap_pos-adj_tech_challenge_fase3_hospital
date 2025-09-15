@@ -31,7 +31,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class); // Usar JsonDeserializer para desserializar mensagens JSON
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); // Ler desde o início do tópico se não houver offset
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "grupo-mensagem-kafka"); // Definir um ID de grupo
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "fiap.adj.fase3"); // Permitir desserialização de qualquer pacote quando usar asterisco
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*"); // Permitir desserialização de qualquer pacote quando usar asterisco
         return props;
     }
 
