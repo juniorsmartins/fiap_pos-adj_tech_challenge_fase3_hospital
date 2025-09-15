@@ -20,26 +20,29 @@ public final class Paciente {
 
     private String nome;
 
+    private String email;
+
     private Usuario user;
 
-    public Paciente(String nome, Usuario user) {
+    public Paciente(String nome, String email, Usuario user) {
         this.nome = nome;
+        this.email = email;
         this.user = user;
     }
 
     public static Paciente converterRequestParaEntity(PacienteRequestDto request, RoleOutputPort roleOutputPort) {
         var usuario = Usuario.criarUsuarioEntity(request.getUser(), RoleEnum.ROLE_PACIENTE, roleOutputPort);
-        return new Paciente(request.getNome(), usuario);
+        return new Paciente(request.getNome(), request.getEmail(), usuario);
     }
 
     public static PacienteDto converterEntityParaDto(Paciente paciente) {
         var userDto = Usuario.converterEntityParaDto(paciente.getUser());
-        return new PacienteDto(paciente.getId(), paciente.getNome(), userDto);
+        return new PacienteDto(paciente.getId(), paciente.getNome(), paciente.getEmail(), userDto);
     }
 
     public static Paciente converterDtoParaEntity(PacienteDto dto) {
         var usuario = Usuario.converterDtoParaEntity(dto.user());
-        return new Paciente(dto.id(), dto.nome(), usuario);
+        return new Paciente(dto.id(), dto.nome(), dto.email(), usuario);
     }
 
     public static Paciente regraAtualizar(PacienteDto dto, PacienteRequestDto request) {
@@ -56,6 +59,6 @@ public final class Paciente {
                 });
         usuario.setRoles(roles);
 
-        return new Paciente(dto.id(), request.getNome(), usuario);
+        return new Paciente(dto.id(), request.getNome(), request.getEmail(), usuario);
     }
 }

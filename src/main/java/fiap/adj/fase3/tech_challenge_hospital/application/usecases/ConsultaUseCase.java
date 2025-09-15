@@ -1,20 +1,26 @@
 package fiap.adj.fase3.tech_challenge_hospital.application.usecases;
 
+import fiap.adj.fase3.tech_challenge_hospital.application.configs.kafka.KafkaProducer;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.internal.ConsultaDto;
 import fiap.adj.fase3.tech_challenge_hospital.application.dtos.request.ConsultaRequestDto;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.Consulta;
 import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.ConsultaStatusEnum;
+import fiap.adj.fase3.tech_challenge_hospital.domain.entities.enums.MotivoKafkaEnum;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.input.ConsultaInputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.ConsultaOutputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.MedicoOutputPort;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.ports.output.PacienteOutputPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ConsultaUseCase implements ConsultaInputPort {
+
+    private final KafkaProducer kafkaProducer;
 
     @Transactional
     @Override
@@ -23,6 +29,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 .map(dto -> Consulta.converterRequestParaEntity(dto, ConsultaStatusEnum.AGENDADO, medicoOutputPort, pacienteOutputPort))
                 .map(Consulta::converterEntityParaDto)
                 .map(consultaOutputPort::salvar)
+                .map(dto -> kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.AGENDAMENTO))
                 .orElseThrow();
     }
 
@@ -36,6 +43,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 })
                 .map(Consulta::converterEntityParaDto)
                 .map(consultaOutputPort::salvar)
+                .map(dto -> kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.ALTERACAO))
                 .orElseThrow();
     }
 
@@ -53,6 +61,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 .ifPresentOrElse(dto -> {
                     dto.setStatus(ConsultaStatusEnum.CONCLUIDO.getValue());
                     consultaOutputPort.salvar(dto);
+                    kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.ALTERACAO);
                 }, () -> {
                     throw new RuntimeException();
                 });
@@ -65,6 +74,7 @@ public class ConsultaUseCase implements ConsultaInputPort {
                 .ifPresentOrElse(dto -> {
                     dto.setStatus(ConsultaStatusEnum.CANCELADO.getValue());
                     consultaOutputPort.salvar(dto);
+                    kafkaProducer.enviarEventoConsulta(dto, MotivoKafkaEnum.ALTERACAO);
                 }, () -> {
                     throw new RuntimeException();
                 });

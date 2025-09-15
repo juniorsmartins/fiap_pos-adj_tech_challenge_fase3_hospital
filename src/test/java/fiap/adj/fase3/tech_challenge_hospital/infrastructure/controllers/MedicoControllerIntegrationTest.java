@@ -1,6 +1,7 @@
 package fiap.adj.fase3.tech_challenge_hospital.infrastructure.controllers;
 
-import fiap.adj.fase3.tech_challenge_hospital.UtilMedicoTest;
+import fiap.adj.fase3.tech_challenge_hospital.kafka.KafkaBaseIntegrationTest;
+import fiap.adj.fase3.tech_challenge_hospital.utils.UtilMedicoTest;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.daos.MedicoDao;
 import fiap.adj.fase3.tech_challenge_hospital.infrastructure.repositories.MedicoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class MedicoControllerIntegrationTest {
+class MedicoControllerIntegrationTest extends KafkaBaseIntegrationTest {
 
     private static final String NOME_INICIAL = "Médico Inicial";
 

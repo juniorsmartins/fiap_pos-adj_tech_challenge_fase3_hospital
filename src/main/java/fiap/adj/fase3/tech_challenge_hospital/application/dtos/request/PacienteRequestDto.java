@@ -13,5 +13,7 @@ public final class PacienteRequestDto {
 
     private String nome;
 
+    private String email;
+
     private UserRequestDto user;
 }

@@ -32,3 +32,21 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}  # Usa broker embutido
+    topic:
+      evento-informar-paciente-consulta: evento-informar-paciente-consulta
+      evento-atualizar-status-consulta: evento-atualizar-status-consulta
+    consumer:
+      group-id: grupo-mensagem-kafka
+      auto-offset-reset: earliest # Ou latest, dependendo do caso de uso - earliest lê desde o início do tópico
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "fiap.adj.fase3" # Pacote confiável para desserialização - Asterisco para confiar em todos
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  # Para JSON
+      properties:
+        spring.json.add.type.headers: false  # Opcional: Evita headers de tipo para simplicidade
